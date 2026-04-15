@@ -1,0 +1,11 @@
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+tenacity>=8.2.3
+tldextract>=5.1.0
+tqdm>=4.66.0
+google-api-python-client>=2.108.0
+google-auth>=2.23.0
+google-auth-oauthlib>=1.1.0
+google-auth-httplib2>=0.1.1
+lxml>=4.9.0
+python-dotenv>=1.0.0

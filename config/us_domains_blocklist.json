@@ -1,0 +1,42 @@
+{
+  "description": "Blocks US corporate/commercial domains to focus on international academic sources. Does NOT block CDN infrastructure or code-hosting platforms.",
+  "blocked_domains": [
+    "microsoft.com", "apple.com", "google.com", "amazon.com", "meta.com",
+    "facebook.com", "instagram.com", "netflix.com", "tesla.com", "nvidia.com",
+    "oracle.com", "ibm.com", "intel.com", "amd.com", "cisco.com",
+    "qualcomm.com", "broadcom.com", "salesforce.com", "adobe.com",
+    "intuit.com", "servicenow.com", "workday.com", "vmware.com",
+    "dell.com", "hp.com", "hpe.com",
+    "paypal.com", "squareup.com", "stripe.com", "shopify.com",
+    "airbnb.com", "uber.com", "lyft.com", "doordash.com",
+    "coinbase.com", "twitter.com", "x.com", "linkedin.com", "snapchat.com",
+    "pinterest.com", "reddit.com", "twilio.com", "okta.com",
+    "crowdstrike.com", "zscaler.com", "datadoghq.com", "splunk.com",
+    "mongodb.com", "snowflake.com", "databricks.com", "confluent.io",
+    "atlassian.com", "slack.com", "zoom.us", "webex.com",
+    "hubspot.com", "zendesk.com", "asana.com", "notion.so",
+    "dropbox.com", "box.com",
+    "goldmansachs.com", "morganstanley.com", "jpmorgan.com",
+    "bankofamerica.com", "wellsfargo.com", "citibank.com",
+    "capitalone.com", "visa.com", "mastercard.com",
+    "blackrock.com", "vanguard.com", "fidelity.com",
+    "walmart.com", "target.com", "costco.com", "bestbuy.com",
+    "homedepot.com", "lowes.com", "wayfair.com",
+    "verizon.com", "att.com", "t-mobile.com", "comcast.com",
+    "sap.com", "accenture.com", "deloitte.com",
+    "ey.com", "pwc.com", "kpmg.com", "mckinsey.com", "bcg.com", "bain.com",
+    "fedex.com", "ups.com",
+    "zillow.com", "redfin.com", "trulia.com",
+    "tripadvisor.com", "hotels.com", "expedia.com",
+    "delta.com", "united.com", "americanairlines.com", "southwest.com",
+    "newrelic.com", "dynatrace.com", "elastic.co",
+    "mailchimp.com", "sendgrid.com", "klaviyo.com",
+    "surveymonkey.com", "typeform.com",
+    "godaddy.com", "bluehost.com", "hostgator.com", "namecheap.com"
+  ],
+  "blocked_tlds": [
+    ".us",
+    ".gov"
+  ],
+  "notes": "Intentionally NOT blocking: cloudflare.com, akamai.com, fastly.com (CDN infrastructure used by legitimate academic hosts), github.com (academic code/slides hosting), archive.org (Internet Archive). Add domains here for commercial US content only."
+}
