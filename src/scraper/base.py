@@ -17,6 +17,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 from src.filters.domain_filter import DomainFilter
+from src.filters.geo_filter import GeoFilter
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +46,8 @@ class BaseScraper:
         self.timeout = timeout
         # (connect_timeout, read_timeout) — kills TCP stalls after read_timeout seconds
         self._timeout = (10, min(timeout, 30))
-        self.domain_filter = DomainFilter()
+        self.domain_filter = DomainFilter(exclude_usa=True)
+        self.geo_filter = GeoFilter(exclude_usa=True, require_english=True)
 
         self.session = requests.Session()
         adapter = HTTPAdapter(
@@ -155,6 +157,11 @@ class BaseScraper:
             return None
 
         if not self.domain_filter.is_allowed(url):
+            self._skipped += 1
+            return None
+
+        # Geo & Language Filter
+        if meta and not self.geo_filter.is_allowed(meta.get("title", ""), meta.get("description", "")):
             self._skipped += 1
             return None
 

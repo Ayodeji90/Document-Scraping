@@ -4,6 +4,9 @@ from .zenodo import ZenodoScraper
 from .figshare import FigshareScraper
 from .hal import HALScraper
 from .internet_archive import InternetArchiveScraper
+from .dataverse import DataverseScraper
+from .core import CoreScraper
+from .github import GitHubScraper
 
 __all__ = [
     "BaseScraper",
@@ -11,4 +14,7 @@ __all__ = [
     "FigshareScraper",
     "HALScraper",
     "InternetArchiveScraper",
+    "DataverseScraper",
+    "CoreScraper",
+    "GitHubScraper",
 ]

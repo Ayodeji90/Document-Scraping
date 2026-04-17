@@ -28,6 +28,9 @@ from src.scraper.figshare import FigshareScraper
 from src.scraper.hal import HALScraper
 from src.scraper.internet_archive import InternetArchiveScraper
 from src.scraper.zenodo import ZenodoScraper
+from src.scraper.dataverse import DataverseScraper
+from src.scraper.core import CoreScraper
+from src.scraper.github import GitHubScraper
 from src.storage.gdrive import GoogleDriveUploader
 
 # ---------------------------------------------------------------------------
@@ -88,9 +91,12 @@ SCRAPER_MAP = {
     "zenodo": ZenodoScraper,
     "hal": HALScraper,
     "internet_archive": InternetArchiveScraper,
+    "dataverse": DataverseScraper,
+    "core": CoreScraper,
+    "github": GitHubScraper,
 }
 
-SOURCE_ORDER = ["figshare", "hal", "internet_archive", "zenodo"]
+SOURCE_ORDER = ["figshare", "zenodo", "hal", "core", "github", "dataverse", "internet_archive"]
 
 
 def build_scraper(name: str, delay: tuple) -> BaseScraper:
@@ -184,8 +190,12 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
-        "-t", "--target", type=int, default=1500,
-        help="Target number of PPT files (default: 1500)",
+        "-t", "--target", type=int, default=3000,
+        help="Target number of PPT files (default: 3000)",
+    )
+    parser.add_argument(
+        "--start-index", type=int, default=577,
+        help="Starting index for sequential numbering (default: 577)",
     )
     parser.add_argument(
         "-s", "--source",
@@ -267,8 +277,23 @@ def main():
     print(f"{'=' * 60}")
 
     # Upload
-    if not args.no_upload:
-        upload_batch(uploader, all_files, dry_run=args.dry_run)
+    # Post-process: rename to sequential numbers if requested
+    if args.start_index > 0:
+        print(f"\n🏷️  Renaming {len(all_files)} files to sequential index starting at {args.start_index:05d}...")
+        current_idx = args.start_index
+        renamed_files = []
+        for fp in all_files:
+            ext = fp.suffix
+            new_name = f"{current_idx:05d}{ext}"
+            new_path = fp.parent / new_name
+            try:
+                fp.rename(new_path)
+                renamed_files.append(new_path)
+                current_idx += 1
+            except Exception as e:
+                print(f"  ❌ Failed to rename {fp.name}: {e}")
+                renamed_files.append(fp)
+        all_files = renamed_files
 
     print(f"\n🏁 Done — files saved to: {Path('downloaded_ppts').absolute()}")
 

@@ -1,113 +1,67 @@
 """
-Filters to block non-academic domains and handle URL normalization.
+Domain filtering logic to exclude specific regions (USA) and prioritize others.
 """
-import json
 import logging
-from pathlib import Path
 from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 
-# Essential academic/research domains that must never be blocked, 
-# even if they use commercial CDNs (e.g., Cloudflare, Akamai, etc)
-TRUSTED_HOSTS = {
-    "zenodo.org",
-    "figshare.com",
-    "archives-ouvertes.fr",
-    "hal.science",
-    "archive.org",
-    "dataverse.harvard.edu",
-    "nature.com",
-    "sciencedirect.com",
-    "springer.com",
-    "wiley.com",
-    "academic.oup.com",
-    "cambridge.org",
-    "arxiv.org",
-    "researchgate.net",
-    "academia.edu",
+# Hard blocklist for US-based content
+US_TLDS = {".gov", ".mil", ".us"}
+
+# Selection of top US universities to block (even if they use .edu)
+US_INSTITUTIONS = {
+    "mit.edu", "stanford.edu", "harvard.edu", "berkeley.edu", "princeton.edu",
+    "yale.edu", "columbia.edu", "caltech.edu", "uchicago.edu", "upenn.edu",
+    "cornell.edu", "ucla.edu", "umich.edu", "cmu.edu", "washington.edu",
+    "nyu.edu", "gatech.edu", "utexas.edu", "northwestern.edu", "purdue.edu",
+    "johnshopkins.edu", "duke.edu", "wisc.edu", "ucsd.edu", "illinois.edu"
+}
+
+# Whitelist for target regions to prioritize
+TARGET_TLDS = {
+    ".eu", ".uk", ".fr", ".de", ".nl", ".no", ".se", ".dk", ".fi", ".be", ".it", ".es", # Europe
+    ".kr", ".cn", ".in", ".sg", ".hk", ".tw", ".jp", ".my", ".th", ".vn",               # Asia
+    ".au", ".nz", ".za"                                                                 # Others
 }
 
 class DomainFilter:
-    """Filter out commercial US domains that shouldn't be scraped."""
-    
-    def __init__(self, blocklist_path: Path = None):
-        if not blocklist_path:
-            # Default to the config file in the project
-            project_root = Path(__file__).parent.parent.parent
-            blocklist_path = project_root / "config" / "us_domains_blocklist.json"
-            
-        self.blocked_domains = set()
-        self.blocked_tlds = set()
-        self._load_blocklist(blocklist_path)
-
-    def _load_blocklist(self, path: Path):
-        """Load blocked domains from JSON configuration."""
-        if not path.exists():
-            logger.warning(f"Blocklist not found at {path}, using empty filter")
-            return
-            
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                
-            # Allow for nested category structure or flat list
-            if isinstance(data, dict):
-                for category, domains in data.items():
-                    if isinstance(domains, list):
-                        self._parse_entries(domains)
-            elif isinstance(data, list):
-                self._parse_entries(data)
-                
-            logger.debug(f"Loaded {len(self.blocked_domains)} blocked domains, {len(self.blocked_tlds)} blocked TLDs")
-        except Exception as e:
-            logger.error(f"Failed to load blocklist {path}: {e}")
-            
-    def _parse_entries(self, entries: list):
-        """Parse domain entries into specific domains and TLDs."""
-        for entry in entries:
-            entry = str(entry).strip().lower()
-            if not entry:
-                continue
-                
-            if entry.startswith("*."):
-                self.blocked_tlds.add(entry[2:])
-            else:
-                self.blocked_domains.add(entry)
-
-    def is_blocked(self, url: str) -> bool:
-        """Check if a URL belongs to a blocked domain."""
-        try:
-            parsed = urlparse(url)
-            hostname = parsed.hostname
-            if not hostname:
-                return False
-                
-            hostname = hostname.lower()
-            
-            # 1. Immediate whitelist check (overrides blocklist)
-            for trusted in TRUSTED_HOSTS:
-                if hostname == trusted or hostname.endswith(f".{trusted}"):
-                    return False
-            
-            # 2. Check exact domain or subdomain match
-            parts = hostname.split('.')
-            for i in range(len(parts)):
-                sub_domain = '.'.join(parts[i:])
-                if sub_domain in self.blocked_domains:
-                    return True
-                    
-            # 3. Check TLDs
-            for tld in self.blocked_tlds:
-                if hostname.endswith(f".{tld}"):
-                    return True
-                    
-            return False
-        except Exception as e:
-            logger.warning(f"Error checking domain for {url}: {e}")
-            # Fail open - on error, allow the domain rather than blocking everything
-            return False
+    def __init__(self, exclude_usa: bool = True):
+        self.exclude_usa = exclude_usa
 
     def is_allowed(self, url: str) -> bool:
-        """Check if a URL is permitted (not blocked)."""
-        return not self.is_blocked(url)
+        """Check if a URL is allowed based on geographic constraints."""
+        parsed = urlparse(url)
+        domain = parsed.netloc.lower()
+        if not domain:
+            return True
+
+        # 1. Check US TLDs
+        if self.exclude_usa:
+            if any(domain.endswith(tld) for tld in US_TLDS):
+                logger.debug(f"Blocked US TLD: {domain}")
+                return False
+
+            # 2. Check major US institutions
+            if any(domain == inst or domain.endswith("." + inst) for inst in US_INSTITUTIONS):
+                logger.debug(f"Blocked US Institution: {domain}")
+                return False
+            
+            # 3. Special case for generic .edu (heuristically US)
+            if domain.endswith(".edu") and not any(domain.endswith(t) for t in TARGET_TLDS):
+                # Most non-US unis use country TLDs (e.g. .edu.au, .ac.uk)
+                # Pure .edu is 95% US.
+                logger.debug(f"Blocked generic .edu (assumed US): {domain}")
+                return False
+
+        return True
+
+    def get_priority(self, url: str) -> int:
+        """Return a priority score (higher is better) for international targets."""
+        parsed = urlparse(url)
+        domain = parsed.netloc.lower()
+        
+        if any(domain.endswith(tld) for tld in TARGET_TLDS):
+            return 10
+        
+        return 5
