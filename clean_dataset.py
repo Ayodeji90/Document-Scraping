@@ -7,7 +7,7 @@ import logging
 import olefile
 
 # Configuration
-TARGET_DIR = "downloaded_ppts"
+TARGET_DIR = "downloaded_ppts_india"
 QUARANTINE_DIR = os.path.join(TARGET_DIR, "quarantine")
 MIN_SIZE_BYTES = 5120 # 5KB
 LOG_FILE = "cleanup_report.log"
