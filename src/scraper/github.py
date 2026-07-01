@@ -9,6 +9,7 @@ from typing import Dict, List, Optional
 
 from .base import BaseScraper
 from .keywords import ACADEMIC_DISCIPLINES
+from src.metadata import build_metadata_from_api
 
 logger = logging.getLogger(__name__)
 
@@ -108,7 +109,8 @@ class GitHubScraper(BaseScraper):
                 if len(final_filename) > 200:
                     final_filename = final_filename[:190] + Path(r["filename"]).suffix
 
-                fp = self._download_file(r["url"], final_filename, meta=r)
+                meta = build_metadata_from_api("github", r, r["url"], final_filename)
+                fp = self._download_file(r["url"], final_filename, meta)
                 if fp:
                     downloaded.append(fp)
                     print(f"  [GitHub] {len(downloaded)}/{max_docs} — {fp.name}")

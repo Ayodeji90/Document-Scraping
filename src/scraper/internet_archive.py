@@ -13,6 +13,7 @@ from typing import Dict, List, Set
 from urllib.parse import quote
 
 from .base import BaseScraper
+from src.metadata import build_metadata_from_api
 
 logger = logging.getLogger(__name__)
 
@@ -156,7 +157,8 @@ class InternetArchiveScraper(BaseScraper):
                     break
                 safe_file = re.sub(r"[^\w\-.]", "_", r["filename"])
                 filename = f"ia_{r['identifier']}_{safe_file}"
-                fp = self._download_file(r["url"], filename)
+                meta = build_metadata_from_api("internet_archive", r, r["url"], filename)
+                fp = self._download_file(r["url"], filename, meta)
                 if fp:
                     downloaded.append(fp)
                     print(f"  [IA] {len(downloaded)}/{max_docs} — {fp.name}")

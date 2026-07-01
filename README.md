@@ -1,138 +1,65 @@
-# PPT Document Scraper
+# PPT Document Scraper (Criteria Compliant)
 
-Automated scraper to collect up to 1,500 .ppt/.pptx presentation files and upload directly to Google Drive. Filters out US company domains to focus on international and academic sources.
+This repository contains an automated scraper designed to collect high-quality academic PowerPoint presentations (`.ppt`, `.pptx`) from global open-access sources. 
 
-## Features
+The system implements a rigorous multi-stage verification pipeline to ensure compliance with strict delivery requirements (Criteria 1 & 2), including geographic exclusions, pirate site screening, content quality assessment, and metadata preservation.
 
-- **Multi-source scraping**: SlideShare (Selenium) + Zenodo API
-- **JavaScript rendering**: Selenium for modern web apps
-- **API-based scraping**: Zenodo REST API for reliable downloads
-- **US domain filtering**: Automatically blocks major US company domains
-- **Google Drive integration**: Direct upload to organized folders
-- **Rate limiting**: Respectful scraping with configurable delays
-- **Resume support**: Tracks progress via manifests
+## Architecture
 
-## Quick Start
+The system uses a 10-component pipeline:
+1. **Config**: Centralized settings and blocklists (`src/config.py`).
+2. **Filters**: Domain, geographic, and compliance filtering (`src/filters/`).
+3. **Metadata**: Full metadata capture and JSON sidecar persistence (`src/metadata.py`).
+4. **Validators**: Structural integrity and slide counting via `zipfile` and `olefile` (`src/validators.py`).
+5. **Quality Assessor**: Introspects PPTX XML to detect charts, tables, diagrams, and text-density for HIGH/MEDIUM/LOW classification (`src/quality.py`).
+6. **Verification Pipeline**: Orchestrates 11 sequential compliance checks culminating in a DELIVER/REVIEW/REJECT decision (`src/verification.py`).
+7. **Audit Logger**: Appends structured JSON records to an audit log for every processed file (`src/audit.py`).
+8. **Delivery Manager**: Packages DELIVER files into sequential batches enforcing 70% HIGH / 30% MEDIUM composition (`src/delivery.py`).
+9. **Scrapers**: Custom API integration for Figshare, Zenodo, HAL, Dataverse, CORE, GitHub, and Internet Archive (`src/scraper/`).
+10. **Orchestrator**: The `run.py` entrypoint.
 
-### 1. Install Dependencies
+## Installation
 
 ```bash
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Setup Google Drive
+## Usage
 
-Follow [GOOGLE_SETUP.md](GOOGLE_SETUP.md) to create OAuth credentials.
-
-### 3. Run the Scraper
+Run the main orchestrator:
 
 ```bash
-# Default: Scrape all sources, target 1500 files
+# Default multi-source run (target 3000 files, across all sources)
 python run.py
 
-# Scrape specific source only
-python run.py --source slideshare --target 500
-python run.py --source zenodo --target 1000
+# Run one source only
+python run.py --source figshare --target 500
 
-# Test mode (no uploads)
-python run.py --target 10 --dry-run
+# Skip the slow PPTX XML quality assessment (all files marked MEDIUM)
+python run.py --skip-quality-check
 
-# Download only, skip Google Drive
-python run.py --no-upload --target 100
+# Dry run (download and verify, but do not package final delivery batches)
+python run.py --dry-run
+
+# Resume mode (preload seen files from downloaded_ppts/)
+python run.py --resume
+
+# Verbose logging
+python run.py -v
 ```
 
-## Command Options
+## Data Outputs
 
-```
-python run.py [OPTIONS]
+- `downloaded_ppts/` — Raw files passing the initial download filters, accompanied by `.meta.json` sidecars.
+- `rejected/` — Files that failed the verification pipeline (e.g. corrupted, <5 slides, low quality).
+- `delivery/` — Final packaged batches (e.g. `BATCH-20260416-001/`) meeting the 70/30 quality ratio and sequential naming.
+- `logs/audit_log.jsonl` — The central audit log containing a record for every file processed.
 
-Options:
-  -t, --target INT        Target number of PPT files (default: 1500)
-  -s, --source {all,slideshare,zenodo}
-                          Source to scrape (default: all)
-  --delay-min FLOAT       Min seconds between requests (default: 2)
-  --delay-max FLOAT       Max seconds between requests (default: 5)
-  --dry-run               Test mode without uploads
-  --no-upload             Download only, skip Drive upload
-  -h, --help              Show help
-```
+## Source Exclusion Blocklists
 
-## Project Structure
-
-```
-.
-├── config/
-│   └── us_domains_blocklist.json  # Blocked US company domains
-├── src/
-│   ├── scraper/
-│   │   ├── base.py                # Base scraper class
-│   │   ├── slideshare_selenium.py # SlideShare Selenium scraper
-│   │   └── zenodo.py              # Zenodo API scraper
-│   ├── filters/
-│   │   └── domain_filter.py       # US domain filter logic
-│   └── storage/
-│       └── gdrive.py              # Google Drive upload
-├── downloaded_ppts/               # Local download folder
-├── logs/                          # Manifests and logs
-├── run.py                         # Main entry point
-├── requirements.txt
-├── GOOGLE_SETUP.md
-└── README.md
-```
-
-## Blocked US Company Domains
-
-The scraper automatically blocks URLs from:
-- Major tech: Google, Apple, Microsoft, Amazon, Meta, etc.
-- Finance: Goldman Sachs, JPMorgan, Bank of America, etc.
-- Telecom: Verizon, AT&T, Comcast, T-Mobile
-- Retail: Walmart, Target, Best Buy, Home Depot
-- And 200+ more domains
-
-Edit `config/us_domains_blocklist.json` to customize.
-
-## Sources
-
-### SlideShare (Selenium)
-- JavaScript rendering for modern web app
-- Searches 30+ popular topics
-- Downloads both `.ppt` and `.pptx` files
-- Respects rate limits with Selenium
-
-### Zenodo (API)
-- CERN research repository with public API
-- Searches for presentation files
-- Reliable direct downloads
-- No JavaScript rendering needed
-
-## Safety & Ethics
-
-- Rate limiting: 2-5 second delays between requests
-- Respects `robots.txt` (via requests library)
-- Only downloads publicly accessible files
-- User-Agent identification
-- No authenticated/paywalled content
-
-## Output
-
-Files are:
-1. Downloaded to `downloaded_ppts/`
-2. Uploaded to Google Drive: `PPT_Scraper_Downloads/`
-3. Manifest saved to `logs/manifest_YYYYMMDD_HHMMSS.json`
-
-## Troubleshooting
-
-**ImportError**: Ensure all dependencies installed:
-```bash
-pip install -r requirements.txt
-```
-
-**Google auth fails**: Follow GOOGLE_SETUP.md carefully, verify `credentials.json` exists
-
-**No files downloaded**: Check domain filter logs - US domains are being blocked correctly
-
-**Rate limited**: Increase `--delay-min` and `--delay-max`
-
-## License
-
-For educational/research use. Respect robots.txt and terms of service.
+Exclusion criteria are configured via JSON files in the `config/` directory:
+- `fortune500_blocklist.json`
+- `pirate_domains_blocklist.json`
+- `us_domains_blocklist.json` (includes Elite US Universities and US Research Centers)

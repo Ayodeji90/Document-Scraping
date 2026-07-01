@@ -1,5 +1,5 @@
 {
-  "description": "Blocks US corporate/commercial domains to focus on international academic sources. Does NOT block CDN infrastructure or code-hosting platforms.",
+  "description": "Blocks US corporate/commercial domains, US research centers, and elite US institutions per criteria2 §2. Does NOT block CDN infrastructure or code-hosting platforms.",
   "blocked_domains": [
     "microsoft.com", "apple.com", "google.com", "amazon.com", "meta.com",
     "facebook.com", "instagram.com", "netflix.com", "tesla.com", "nvidia.com",
@@ -36,7 +36,30 @@
   ],
   "blocked_tlds": [
     ".us",
-    ".gov"
+    ".gov",
+    ".mil"
+  ],
+  "blocked_us_institutions": [
+    "mit.edu", "stanford.edu", "harvard.edu", "berkeley.edu", "princeton.edu",
+    "yale.edu", "columbia.edu", "caltech.edu", "uchicago.edu", "upenn.edu",
+    "cornell.edu", "ucla.edu", "umich.edu", "cmu.edu", "washington.edu",
+    "nyu.edu", "gatech.edu", "utexas.edu", "northwestern.edu", "purdue.edu",
+    "johnshopkins.edu", "duke.edu", "wisc.edu", "ucsd.edu", "illinois.edu",
+    "usc.edu", "unc.edu", "uva.edu", "ufl.edu", "umn.edu",
+    "osu.edu", "psu.edu", "umd.edu", "rice.edu", "tamu.edu",
+    "rochester.edu", "emory.edu", "wustl.edu", "vanderbilt.edu", "dartmouth.edu",
+    "brown.edu", "nd.edu", "georgetown.edu", "tufts.edu", "brandeis.edu",
+    "bu.edu", "bc.edu", "case.edu", "rpi.edu", "wpi.edu"
+  ],
+  "blocked_us_research_centers": [
+    "sandia.gov", "lanl.gov", "ornl.gov", "nrel.gov", "anl.gov",
+    "bnl.gov", "lbl.gov", "pnl.gov", "inl.gov", "fnal.gov",
+    "slac.stanford.edu", "jpl.nasa.gov", "nasa.gov",
+    "nih.gov", "cdc.gov", "nsf.gov", "doe.gov", "epa.gov",
+    "rand.org", "brookings.edu", "hoover.org", "cato.org",
+    "heritage.org", "aei.org", "carnegieendowment.org",
+    "mit.edu/lincoln", "jhuapl.edu",
+    "mitre.org", "sri.com", "bbn.com"
   ],
   "notes": "Intentionally NOT blocking: cloudflare.com, akamai.com, fastly.com (CDN infrastructure used by legitimate academic hosts), github.com (academic code/slides hosting), archive.org (Internet Archive). Add domains here for commercial US content only."
 }

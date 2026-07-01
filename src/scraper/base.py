@@ -1,23 +1,20 @@
 """
-Base scraper class with:
-- (connect, read) timeout split to kill TCP stalls
-- Cross-instance URL + filename deduplication
-- Exponential backoff retries with 429 handling
-- No sidecar JSON files (removed per user request)
+Base scraper class with integrated criteria verification and audit logging.
 """
 import logging
 import random
 import time
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-from urllib.parse import urlparse
 
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from src.filters.domain_filter import DomainFilter
-from src.filters.geo_filter import GeoFilter
+from src.config import get_config
+from src.metadata import FileMetadata, MetadataStore
+from src.audit import AuditLogger
+from src.verification import VerificationPipeline
 
 logger = logging.getLogger(__name__)
 
@@ -34,26 +31,26 @@ class BaseScraper:
 
     def __init__(
         self,
-        download_dir: str = "downloaded_ppts",
-        api_delay: Tuple[float, float] = (0.5, 1.5),
-        download_delay: Tuple[float, float] = (1.5, 3.5),
-        timeout: int = 60,
+        metadata_store: MetadataStore,
+        verification_pipeline: VerificationPipeline,
+        audit_logger: AuditLogger,
     ):
-        self.download_dir = Path(download_dir)
-        self.download_dir.mkdir(parents=True, exist_ok=True)
-        self.api_delay = api_delay
-        self.download_delay = download_delay
-        self.timeout = timeout
-        # (connect_timeout, read_timeout) — kills TCP stalls after read_timeout seconds
-        self._timeout = (10, min(timeout, 30))
-        self.domain_filter = DomainFilter(exclude_usa=True)
-        self.geo_filter = GeoFilter(exclude_usa=True, require_english=True)
+        self.config = get_config()
+        self.download_dir = self.config.download_dir
+        self.rejected_dir = self.config.rejected_dir
+        self.metadata_store = metadata_store
+        self.verification_pipeline = verification_pipeline
+        self.audit_logger = audit_logger
+
+        self.api_delay = self.config.api_delay
+        self.download_delay = self.config.download_delay
+        self._timeout = (10, min(self.config.timeout, 30))
 
         self.session = requests.Session()
         adapter = HTTPAdapter(
             max_retries=Retry(
-                total=3,
-                backoff_factor=1.5,
+                total=self.config.max_retries,
+                backoff_factor=self.config.backoff_factor,
                 status_forcelist=[500, 502, 503, 504],
                 allowed_methods=["GET", "POST"],
             )
@@ -62,15 +59,23 @@ class BaseScraper:
         self.session.mount("http://", adapter)
         self.session.headers.update({
             "User-Agent": (
-                "Mozilla/5.0 (compatible; AcademicScraper/2.0; "
+                "Mozilla/5.0 (compatible; AcademicScraper/3.0; "
                 "+https://github.com/academic-scraper)"
             )
         })
 
         # Per-instance stats
-        self._downloaded = 0
-        self._skipped = 0
-        self._failed = 0
+        self._stats = {
+            "downloaded": 0,
+            "delivered": 0,
+            "review": 0,
+            "rejected": 0,
+            "skipped": 0,
+            "failed": 0,
+            "high_count": 0,
+            "medium_count": 0,
+            "low_count": 0,
+        }
 
     @classmethod
     def preload_seen_from_dir(cls, directory: Path):
@@ -78,7 +83,7 @@ class BaseScraper:
         if not directory.exists():
             return
         for f in directory.iterdir():
-            if f.suffix.lower() in (".ppt", ".pptx"):
+            if f.suffix.lower() in (".ppt", ".pptx", ".pdf"):
                 cls._seen_files.add(f.name.lower())
         logger.info(f"Resume: pre-loaded {len(cls._seen_files)} known filenames")
 
@@ -93,16 +98,16 @@ class BaseScraper:
         logger.warning(f"Rate limited (429). Waiting {wait}s…")
         time.sleep(wait)
 
-    def _fetch_json(self, url: str, params: Dict = None, bypass_filter: bool = False) -> Optional[Dict]:
+    def _fetch_json(self, url: str, params: Dict = None, headers: Dict = None, bypass_filter: bool = False) -> Optional[Dict]:
         """GET JSON from a URL with retries."""
-        if not bypass_filter and not self.domain_filter.is_allowed(url):
+        if not bypass_filter and not self.verification_pipeline.compliance.domain_filter.is_allowed(url):
             logger.debug(f"Blocked by domain filter: {url}")
             return None
 
         self._api_sleep()
         for attempt in range(3):
             try:
-                resp = self.session.get(url, params=params, timeout=self._timeout)
+                resp = self.session.get(url, params=params, headers=headers, timeout=self._timeout)
                 if resp.status_code == 429:
                     self._handle_rate_limit(attempt)
                     continue
@@ -118,15 +123,15 @@ class BaseScraper:
                 time.sleep(2 ** attempt)
         return None
 
-    def _post_json(self, url: str, payload: Dict, bypass_filter: bool = False) -> Optional[Dict]:
+    def _post_json(self, url: str, payload: Dict, headers: Dict = None, bypass_filter: bool = False) -> Optional[Dict]:
         """POST JSON payload and return JSON response."""
-        if not bypass_filter and not self.domain_filter.is_allowed(url):
+        if not bypass_filter and not self.verification_pipeline.compliance.domain_filter.is_allowed(url):
             return None
 
         self._api_sleep()
         for attempt in range(3):
             try:
-                resp = self.session.post(url, json=payload, timeout=self._timeout)
+                resp = self.session.post(url, json=payload, headers=headers, timeout=self._timeout)
                 if resp.status_code == 429:
                     self._handle_rate_limit(attempt)
                     continue
@@ -142,36 +147,36 @@ class BaseScraper:
                 time.sleep(2 ** attempt)
         return None
 
-    def _download_file(self, url: str, filename: str, meta: Dict = None) -> Optional[Path]:
-        """Download a file, skip if already downloaded or URL already seen."""
+    def _download_file(self, url: str, filename: str, meta: FileMetadata) -> Optional[Path]:
+        """
+        Download a file, run verification pipeline, write metadata and audit log.
+        """
         # URL deduplication
         if url in BaseScraper._seen_urls:
-            self._skipped += 1
+            self._stats["skipped"] += 1
             return None
         BaseScraper._seen_urls.add(url)
 
         # Filename deduplication
         filename_lower = filename.lower()
         if filename_lower in BaseScraper._seen_files:
-            self._skipped += 1
+            self._stats["skipped"] += 1
             return None
 
-        if not self.domain_filter.is_allowed(url):
-            self._skipped += 1
-            return None
-
-        # Geo & Language Filter
-        if meta and not self.geo_filter.is_allowed(meta.get("title", ""), meta.get("description", "")):
-            self._skipped += 1
+        # Domain/Pirate filter pre-check before downloading
+        if not self.verification_pipeline.compliance.domain_filter.is_allowed(url):
+            self._stats["skipped"] += 1
             return None
 
         dest = self.download_dir / filename
         if dest.exists() and dest.stat().st_size > 0:
             BaseScraper._seen_files.add(filename_lower)
-            self._skipped += 1
+            self._stats["skipped"] += 1
             return None
 
         self._download_sleep()
+        file_downloaded = False
+        
         for attempt in range(3):
             try:
                 resp = self.session.get(
@@ -182,7 +187,7 @@ class BaseScraper:
                     continue
                 if not resp.ok:
                     logger.warning(f"Download failed ({resp.status_code}): {url}")
-                    self._failed += 1
+                    self._stats["failed"] += 1
                     return None
 
                 # Validate content type
@@ -190,6 +195,7 @@ class BaseScraper:
                 ppt_types = {
                     "application/vnd.ms-powerpoint",
                     "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    "application/pdf",
                     "application/octet-stream",
                     "application/zip",
                     "application/x-zip-compressed",
@@ -203,16 +209,8 @@ class BaseScraper:
                         if chunk:
                             f.write(chunk)
 
-                # Verify non-empty
-                if dest.stat().st_size == 0:
-                    dest.unlink()
-                    self._failed += 1
-                    return None
-
-                BaseScraper._seen_files.add(filename_lower)
-                self._downloaded += 1
-                logger.info(f"Downloaded: {filename} ({dest.stat().st_size:,} bytes)")
-                return dest
+                file_downloaded = True
+                break
 
             except requests.exceptions.Timeout:
                 logger.warning(f"Download timeout attempt {attempt+1}: {url}")
@@ -223,15 +221,57 @@ class BaseScraper:
                 if dest.exists():
                     dest.unlink()
 
-        self._failed += 1
-        return None
+        if not file_downloaded:
+            self._stats["failed"] += 1
+            return None
+
+        BaseScraper._seen_files.add(filename_lower)
+        self._stats["downloaded"] += 1
+
+        # Run Verification Pipeline
+        verification = self.verification_pipeline.verify(dest, meta)
+        
+        # Update metadata with verification results
+        if verification.validation:
+            meta.file_size = verification.validation.file_size
+            meta.slide_count = verification.validation.slide_count
+            meta.file_hash = verification.validation.file_hash
+            
+        if verification.quality:
+            meta.quality_classification = verification.quality.classification
+            if meta.quality_classification == "HIGH":
+                self._stats["high_count"] += 1
+            elif meta.quality_classification == "MEDIUM":
+                self._stats["medium_count"] += 1
+            else:
+                self._stats["low_count"] += 1
+                
+        meta.delivery_status = verification.decision
+
+        # Log Audit Record
+        self.audit_logger.log_file(filename, meta, verification)
+
+        # Handle decision
+        if verification.decision == "REJECT":
+            self._stats["rejected"] += 1
+            # Move to rejected directory
+            rej_path = self.rejected_dir / dest.name
+            dest.replace(rej_path)
+            # We don't save metadata for rejected files to avoid clutter,
+            # their info is in the audit log.
+            return None
+        elif verification.decision == "REVIEW":
+            self._stats["review"] += 1
+        else:
+            self._stats["delivered"] += 1
+
+        # Save metadata sidecar
+        self.metadata_store.save(dest, meta)
+        logger.info(f"Downloaded & Verified [{meta.delivery_status}]: {filename} ({dest.stat().st_size:,} bytes)")
+        return dest
 
     def get_stats(self) -> Dict:
-        return {
-            "downloaded": self._downloaded,
-            "skipped": self._skipped,
-            "failed": self._failed,
-        }
+        return self._stats
 
     def scrape(self, max_docs: int = 1500) -> List[Path]:
         raise NotImplementedError("Subclasses must implement scrape()")

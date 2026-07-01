@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Dict, List
 
 from .base import BaseScraper
+from src.metadata import build_metadata_from_api
 
 logger = logging.getLogger(__name__)
 
@@ -97,7 +98,8 @@ class FigshareScraper(BaseScraper):
                     title = article.get("title", "untitled")
                     ppt_files = self._get_ppt_files(article_id)
                     for f in ppt_files:
-                        results.append({
+                        record = dict(article)
+                        record.update({
                             "url": f["download_url"],
                             "title": title,
                             "filename": f.get("name", "file.pptx"),
@@ -106,6 +108,7 @@ class FigshareScraper(BaseScraper):
                             "item_type": item_type,
                             "query": query,
                         })
+                        results.append(record)
                         if len(results) >= max_results:
                             break
                     if len(results) >= max_results:
@@ -134,7 +137,11 @@ class FigshareScraper(BaseScraper):
                 ext = ".ppt" if r["filename"].lower().endswith(".ppt") else ".pptx"
                 safe = re.sub(r"[^\w\-]", "_", r["title"][:80])
                 filename = f"figshare_{r['article_id']}_{safe}{ext}"
-                fp = self._download_file(r["url"], filename)
+                
+                # Build rich metadata
+                meta = build_metadata_from_api("figshare", r, r["url"], filename)
+                
+                fp = self._download_file(r["url"], filename, meta)
                 if fp:
                     downloaded.append(fp)
                     print(f"  [Figshare] {len(downloaded)}/{max_docs} — {fp.name}")

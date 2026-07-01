@@ -13,6 +13,7 @@ from typing import Dict, List
 from urllib.parse import unquote
 
 from .base import BaseScraper
+from src.metadata import build_metadata_from_api
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +78,8 @@ class HALScraper(BaseScraper):
 
             for file_url in files_s:
                 if self._is_ppt_url(file_url):
-                    results.append({
+                    record = dict(doc)
+                    record.update({
                         "url": file_url,
                         "title": title[:200],
                         "hal_id": hal_id,
@@ -85,6 +87,7 @@ class HALScraper(BaseScraper):
                         "source": "hal",
                         "query": query,
                     })
+                    results.append(record)
         return results
 
     def search(self, query: str = None, max_results: int = 100) -> List[Dict]:
@@ -124,7 +127,11 @@ class HALScraper(BaseScraper):
                 safe = re.sub(r"[^\w\-]", "_", r["title"][:80])
                 hal_safe = re.sub(r"[^\w\-]", "_", r["hal_id"])
                 filename = f"hal_{hal_safe}_{safe}{ext}"
-                fp = self._download_file(r["url"], filename)
+                
+                # Build rich metadata
+                meta = build_metadata_from_api("hal", r, r["url"], filename)
+                
+                fp = self._download_file(r["url"], filename, meta)
                 if fp:
                     downloaded.append(fp)
                     print(f"  [HAL] {len(downloaded)}/{max_docs} — {fp.name}")

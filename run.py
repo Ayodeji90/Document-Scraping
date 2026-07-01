@@ -2,28 +2,30 @@
 """
 PPT Document Scraper — orchestration entry point.
 
-Downloads up to 1,500 .ppt/.pptx files from academic sources
-(Figshare, Zenodo, HAL, Internet Archive) and optionally uploads
-them to Google Drive.
+Complies with Criteria1 & Criteria2 requirements for delivery, quality,
+metadata preservation, and multi-stage verification.
 
 Usage:
-    python run.py                        # all sources, target 1500
+    python run.py                        # all sources, target 3000
     python run.py -t 500 -s figshare     # single source
-    python run.py --dry-run              # test without uploading
-    python run.py --no-upload            # download only
-    python run.py --resume               # skip already-downloaded files
+    python run.py --dry-run              # test without packaging
+    python run.py --skip-quality-check   # disable slow quality assessment
     python run.py -v                     # verbose logging
 """
 import argparse
-import json
 import logging
 import sys
-from datetime import datetime
 from pathlib import Path
 
-from tqdm import tqdm
+from src.config import get_config, set_config
+from src.metadata import MetadataStore
+from src.audit import AuditLogger
+from src.delivery import DeliveryManager
+from src.validators import FileValidator
+from src.quality import QualityAssessor
+from src.filters import DomainFilter, GeoFilter, ComplianceFilter
+from src.verification import VerificationPipeline
 
-from src.scraper.base import BaseScraper
 from src.scraper.figshare import FigshareScraper
 from src.scraper.hal import HALScraper
 from src.scraper.internet_archive import InternetArchiveScraper
@@ -31,14 +33,12 @@ from src.scraper.zenodo import ZenodoScraper
 from src.scraper.dataverse import DataverseScraper
 from src.scraper.core import CoreScraper
 from src.scraper.github import GitHubScraper
-from src.storage.gdrive import GoogleDriveUploader
 
-# ---------------------------------------------------------------------------
-# Logging
-# ---------------------------------------------------------------------------
+from src.scraper.base import BaseScraper
+
 
 def setup_logging(verbose: bool):
-    level = logging.DEBUG if verbose else logging.WARNING
+    level = logging.DEBUG if verbose else logging.INFO
     logging.basicConfig(
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
         datefmt="%H:%M:%S",
@@ -46,45 +46,6 @@ def setup_logging(verbose: bool):
         stream=sys.stderr,
     )
 
-# ---------------------------------------------------------------------------
-# Google Drive helpers
-# ---------------------------------------------------------------------------
-
-def setup_gdrive() -> "GoogleDriveUploader | None":
-    print("\n🔐 Authenticating with Google Drive…")
-    uploader = GoogleDriveUploader()
-    try:
-        uploader.authenticate()
-        uploader.create_folder()
-        return uploader
-    except FileNotFoundError as e:
-        print(f"  ❌ {e}")
-        print("  ⚠️  See GOOGLE_SETUP.md to create credentials.json")
-        return None
-
-
-def upload_batch(uploader, files, dry_run: bool):
-    if dry_run:
-        print(f"\n📤 [DRY RUN] Would upload {len(files)} file(s)")
-        return
-    if not uploader:
-        print("\n⚠️  Google Drive not configured — skipping upload")
-        return
-
-    print(f"\n📤 Uploading {len(files)} file(s) to Google Drive…")
-    ok, fail = 0, 0
-    for fp in tqdm(files, unit="file", desc="Uploading"):
-        try:
-            uploader.upload_file(fp, {"scraped_date": datetime.now().isoformat()})
-            ok += 1
-        except Exception as e:
-            tqdm.write(f"  ❌ Upload failed: {fp.name}: {e}")
-            fail += 1
-    print(f"  ✅ {ok} uploaded, {fail} failed")
-
-# ---------------------------------------------------------------------------
-# Scraper runners
-# ---------------------------------------------------------------------------
 
 SCRAPER_MAP = {
     "figshare": FigshareScraper,
@@ -95,37 +56,22 @@ SCRAPER_MAP = {
     "core": CoreScraper,
     "github": GitHubScraper,
 }
-
 SOURCE_ORDER = ["figshare", "zenodo", "hal", "core", "github", "dataverse", "internet_archive"]
 
 
-def build_scraper(name: str, delay: tuple) -> BaseScraper:
-    cls = SCRAPER_MAP[name]
-    return cls(
-        download_dir="downloaded_ppts",
-        api_delay=(delay[0] * 0.25, delay[0] * 0.75),
-        download_delay=delay,
-    )
-
-
-def run_scrapers(sources: list, target: int, delay: tuple, verbose: bool) -> tuple:
-    """
-    Run scrapers in order until `target` files are collected.
-    Returns (all_files, all_stats).
-    """
-    all_files = []
+def run_scrapers(sources: list, target: int, deps: dict, verbose: bool) -> dict:
+    """Run scrapers in order until `target` files are collected."""
     all_stats = {}
+    total_downloaded = 0
 
-    # Distribute target evenly; last source gets the remainder
     n = len(sources)
     base_alloc = target // n
 
     for i, source in enumerate(sources):
-        if len(all_files) >= target:
+        if total_downloaded >= target:
             break
 
-        # Give leftover slots to the last source
-        alloc = target - len(all_files) if i == n - 1 else base_alloc
+        alloc = target - total_downloaded if i == n - 1 else base_alloc
         alloc = max(alloc, 1)
 
         print(f"\n{'=' * 60}")
@@ -133,172 +79,137 @@ def run_scrapers(sources: list, target: int, delay: tuple, verbose: bool) -> tup
         print(f"{'=' * 60}")
 
         try:
-            scraper = build_scraper(source, delay)
-            files = scraper.scrape(max_docs=alloc)
-            all_files.extend(files)
-            all_stats[source] = scraper.get_stats()
+            cls = SCRAPER_MAP[source]
+            scraper = cls(
+                metadata_store=deps["metadata_store"],
+                verification_pipeline=deps["verification_pipeline"],
+                audit_logger=deps["audit_logger"],
+            )
+            scraper.scrape(max_docs=alloc)
+            stats = scraper.get_stats()
+            all_stats[source] = stats
+            total_downloaded += stats["downloaded"]
         except Exception as e:
             print(f"  ❌ Scraper error for {source}: {e}")
             if verbose:
                 import traceback
                 traceback.print_exc()
-            all_stats[source] = {"downloaded": 0, "skipped": 0, "failed": 0}
+            all_stats[source] = {"downloaded": 0, "delivered": 0, "rejected": 0, "skipped": 0, "failed": 0}
             continue
 
-        print(f"\n  ✅ {source}: {all_stats[source]['downloaded']} downloaded so far")
-        print(f"  📦 Total collected: {len(all_files)}/{target}")
+        print(f"\n  ✅ {source}: {stats['downloaded']} downloaded, {stats['delivered']} deliverable")
+        print(f"  📦 Total downloaded so far: {total_downloaded}/{target}")
 
-    return all_files, all_stats
+    return all_stats
 
-# ---------------------------------------------------------------------------
-# Manifest
-# ---------------------------------------------------------------------------
-
-def save_manifest(args, all_files, all_stats):
-    logs_dir = Path("logs")
-    logs_dir.mkdir(exist_ok=True)
-    path = logs_dir / f"manifest_{datetime.now():%Y%m%d_%H%M%S}.json"
-
-    total_dl = sum(s.get("downloaded", 0) for s in all_stats.values())
-    total_sk = sum(s.get("skipped", 0) for s in all_stats.values())
-    total_fl = sum(s.get("failed", 0) for s in all_stats.values())
-
-    manifest = {
-        "timestamp": datetime.now().isoformat(),
-        "config": vars(args),
-        "summary": {
-            "downloaded": total_dl,
-            "skipped": total_sk,
-            "failed": total_fl,
-            "total_files": len(all_files),
-        },
-        "by_source": all_stats,
-        "files": [str(f) for f in all_files],
-    }
-    with open(path, "w") as fh:
-        json.dump(manifest, fh, indent=2)
-    print(f"\n📝 Manifest: {path}")
-    return path, manifest["summary"]
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser(
-        description="PPT Document Scraper — downloads .ppt/.pptx files from academic sources",
+        description="PPT Document Scraper — Criteria-Compliant Version",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument(
-        "-t", "--target", type=int, default=3000,
-        help="Target number of PPT files (default: 3000)",
-    )
-    parser.add_argument(
-        "--start-index", type=int, default=577,
-        help="Starting index for sequential numbering (default: 577)",
-    )
-    parser.add_argument(
-        "-s", "--source",
-        choices=["all"] + list(SCRAPER_MAP.keys()),
-        default="all",
-        help="Source to scrape (default: all)",
-    )
-    parser.add_argument(
-        "--delay-min", type=float, default=1.5,
-        help="Min seconds between file downloads (default: 1.5)",
-    )
-    parser.add_argument(
-        "--delay-max", type=float, default=3.5,
-        help="Max seconds between file downloads (default: 3.5)",
-    )
-    parser.add_argument(
-        "--dry-run", action="store_true",
-        help="Download files but do not upload to Google Drive",
-    )
-    parser.add_argument(
-        "--no-upload", action="store_true",
-        help="Download only, skip Google Drive upload entirely",
-    )
-    parser.add_argument(
-        "--resume", action="store_true",
-        help="Skip files already present in downloaded_ppts/",
-    )
-    parser.add_argument(
-        "-v", "--verbose", action="store_true",
-        help="Enable verbose debug logging",
-    )
-
+    parser.add_argument("-t", "--target", type=int, default=3000, help="Target number of PPT files (default: 3000)")
+    parser.add_argument("-s", "--source", choices=["all"] + list(SCRAPER_MAP.keys()), default="all", help="Source to scrape")
+    parser.add_argument("--batch-size", type=int, default=500, help="Max files per delivery batch (default: 500)")
+    parser.add_argument("--skip-quality-check", action="store_true", help="Skip the slow PPTX XML quality assessment")
+    parser.add_argument("--dry-run", action="store_true", help="Download and verify, but don't package final delivery batches")
+    parser.add_argument("--resume", action="store_true", help="Skip files already present in downloaded_ppts/")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose debug logging")
     args = parser.parse_args()
+
     setup_logging(args.verbose)
 
-    delay = (args.delay_min, args.delay_max)
+    # 1. Configuration
+    config = get_config()
+    config.target = args.target
+    config.batch_size = args.batch_size
+    config.skip_quality_check = args.skip_quality_check
+    config.dry_run = args.dry_run
+    config.resume = args.resume
+    config.verbose = args.verbose
+    config.ensure_dirs()
+
+    # 2. Dependency Injection
+    domain_filter = DomainFilter()
+    geo_filter = GeoFilter()
+    compliance_filter = ComplianceFilter(domain_filter, geo_filter)
+    validator = FileValidator(
+        min_size_bytes=config.min_file_size_bytes,
+        min_slides=config.min_slide_count,
+        max_slides=config.max_slide_count,
+    )
+    quality_assessor = QualityAssessor()
+    verification_pipeline = VerificationPipeline(
+        validator=validator,
+        compliance_filter=compliance_filter,
+        quality_assessor=quality_assessor,
+        skip_quality=config.skip_quality_check,
+    )
+    metadata_store = MetadataStore(sidecar_ext=config.metadata_sidecar_ext)
+    audit_logger = AuditLogger(config.audit_log_path)
+    delivery_manager = DeliveryManager(config.delivery_dir, metadata_store)
+
+    deps = {
+        "metadata_store": metadata_store,
+        "verification_pipeline": verification_pipeline,
+        "audit_logger": audit_logger,
+        "delivery_manager": delivery_manager,
+    }
+
     sources = SOURCE_ORDER if args.source == "all" else [args.source]
 
     print("\n" + "=" * 60)
-    print("📊  PPT DOCUMENT SCRAPER v2.0")
+    print("📊  PPT DOCUMENT SCRAPER v3.0 (CRITERIA COMPLIANT)")
     print("=" * 60)
     print(f"  Target:    {args.target} files")
     print(f"  Sources:   {', '.join(sources)}")
-    print(f"  Delay:     {args.delay_min}–{args.delay_max}s (downloads)")
+    print(f"  Quality:   {'SKIPPED' if args.skip_quality_check else 'ENABLED'}")
     print(f"  Dry run:   {args.dry_run}")
-    print(f"  Resume:    {args.resume}")
     print("=" * 60)
 
-    # Resume: pre-populate seen-files from disk
+    # Resume pre-loading
     if args.resume:
-        BaseScraper.preload_seen_from_dir(Path("downloaded_ppts"))
+        BaseScraper.preload_seen_from_dir(config.download_dir)
 
-    # Google Drive setup (unless skipping)
-    uploader = None
-    if not args.no_upload and not args.dry_run:
-        uploader = setup_gdrive()
+    # 3. Scraping Phase
+    all_stats = run_scrapers(sources, args.target, deps, args.verbose)
 
-    # Run scrapers
-    all_files, all_stats = run_scrapers(sources, args.target, delay, args.verbose)
-
-    # Summary
+    # 4. Packaging Phase
     print("\n" + "=" * 60)
-    print("📈  FINAL SUMMARY")
+    print("📦  PACKAGING DELIVERY BATCHES")
     print("=" * 60)
-    for src, stats in all_stats.items():
-        print(f"  {src.upper():20s}  ✓ {stats.get('downloaded', 0):4d}  "
-              f"⛔ {stats.get('skipped', 0):4d}  ❌ {stats.get('failed', 0):4d}")
+    
+    # Run delivery manager to package all DELIVER status files
+    batch_id = delivery_manager.package_delivery(config.download_dir, dry_run=args.dry_run)
+    if batch_id:
+        print(f"  ✅ Packaged delivery batch: {batch_id}")
+    else:
+        print("  ⚠️ No files were eligible for delivery packaging.")
 
-    _, summary = save_manifest(args, all_files, all_stats)
+    # 5. Summary
+    print("\n" + "=" * 60)
+    print("📈  FINAL PIPELINE SUMMARY")
+    print("=" * 60)
+    
+    total_dl = sum(s.get("downloaded", 0) for s in all_stats.values())
+    total_del = sum(s.get("delivered", 0) for s in all_stats.values())
+    total_rej = sum(s.get("rejected", 0) for s in all_stats.values())
+    total_rev = sum(s.get("review", 0) for s in all_stats.values())
+    
+    for src, stats in all_stats.items():
+        print(f"  {src.upper():20s}  ✓ DL: {stats.get('downloaded', 0):4d}  "
+              f"📦 DELIVER: {stats.get('delivered', 0):4d}  "
+              f"❌ REJECT: {stats.get('rejected', 0):4d}")
 
     print(f"\n{'=' * 60}")
-    print(f"  📦 Total downloaded : {summary['downloaded']}")
-    print(f"  ⛔ Total skipped    : {summary['skipped']}")
-    print(f"  ❌ Total failed     : {summary['failed']}")
-
-    if summary["downloaded"] == 0:
-        print("\n  ⚠️  WARNING: Zero files downloaded.")
-        print("     Check network connectivity and run with -v for details.")
+    print(f"  📥 Total Downloaded : {total_dl}")
+    print(f"  ✅ Total Deliverable: {total_del}")
+    print(f"  ⚠️ Total Review     : {total_rev}")
+    print(f"  ❌ Total Rejected   : {total_rej}")
+    print(f"  📝 Audit Log        : {config.audit_log_path.absolute()}")
     print(f"{'=' * 60}")
 
-    # Upload
-    # Post-process: rename to sequential numbers if requested
-    if args.start_index > 0:
-        print(f"\n🏷️  Renaming {len(all_files)} files to sequential index starting at {args.start_index:05d}...")
-        current_idx = args.start_index
-        renamed_files = []
-        for fp in all_files:
-            ext = fp.suffix
-            new_name = f"{current_idx:05d}{ext}"
-            new_path = fp.parent / new_name
-            try:
-                fp.rename(new_path)
-                renamed_files.append(new_path)
-                current_idx += 1
-            except Exception as e:
-                print(f"  ❌ Failed to rename {fp.name}: {e}")
-                renamed_files.append(fp)
-        all_files = renamed_files
-
-    print(f"\n🏁 Done — files saved to: {Path('downloaded_ppts').absolute()}")
-
-    # Non-zero exit if nothing was collected
-    if summary["downloaded"] == 0:
+    if total_dl == 0:
         sys.exit(1)
 
 

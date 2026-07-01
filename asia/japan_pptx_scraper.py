@@ -11,6 +11,14 @@ Strategies for 10,000+ files:
   4. Broad wildcard domains (site:*.ac.jp).
 """
 
+
+import sys
+import os
+# Add project root to sys.path
+_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if _root not in sys.path:
+    sys.path.insert(0, _root)
+
 import argparse
 import hashlib
 import logging
@@ -23,6 +31,7 @@ from pathlib import Path
 from typing import List, Optional, Set
 from urllib.parse import urljoin, urlparse
 
+from src.utils.persistence import load_master_tags, save_new_tag
 import requests
 import urllib3
 from bs4 import BeautifulSoup
@@ -131,10 +140,10 @@ class SearchEngineJapanScraper:
     def __init__(
         self,
         out_dir: str = "downloaded_ppts_japan",
-        request_timeout: int = 20,
-        delay_seconds: float = 1.2,
+        request_timeout: int = 45,
+        delay_seconds: float = 2.0,
         verify_ssl: bool = True,
-        max_results_per_query: int = 100,
+        max_results_per_query: int = 300,
     ):
         self.out_dir = Path(out_dir)
         self.out_dir.mkdir(parents=True, exist_ok=True)
@@ -149,17 +158,22 @@ class SearchEngineJapanScraper:
 
         if not verify_ssl:
             warnings.filterwarnings("ignore", category=urllib3.exceptions.InsecureRequestWarning)
-
     def _preload_seen_from_disk(self):
-        if not self.out_dir.exists(): return
-        count = 0
-        for p in self.out_dir.glob("*_*"):
-            tag = p.name.split("_")[0]
-            if len(tag) == 10:
-                self._seen_tags.add(tag)
-                count += 1
-        if count > 0:
-            print(f"Resuming: Preloaded {count} existing files from disk.")
+        # Load from global persistence log
+        master_tags = load_master_tags()
+        self._seen_tags.update(master_tags)
+        
+        # Also check local disk for current session continuity
+        if self.out_dir.exists():
+            for p in self.out_dir.glob("*_*"):
+                tag = p.name.split("_")[0]
+                if len(tag) == 10:
+                    self._seen_tags.add(tag)
+        
+        if len(self._seen_tags) > 0:
+            logger.info("Resuming: Loaded %d seen tags (Global + Local).", len(self._seen_tags))
+
+
 
     def _build_session(self) -> requests.Session:
         s = requests.Session()
@@ -167,6 +181,26 @@ class SearchEngineJapanScraper:
         s.mount("https://", HTTPAdapter(max_retries=retries))
         s.headers.update({"User-Agent": "Mozilla/5.0 JapanScraper/2.0 (Academic Research)"})
         return s
+
+
+    def _search_bing(self, query):
+        """Fallback search via Bing when DuckDuckGo is rate-limited."""
+        found = []
+        try:
+            headers = {
+                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+            url = f"https://www.bing.com/search?q={requests.utils.quote(query)}&count=50"
+            resp = self.session.get(url, headers=headers, timeout=15, verify=self.verify_ssl)
+            if resp.ok:
+                soup = BeautifulSoup(resp.text, "lxml")
+                for a in soup.find_all("a", href=True):
+                    href = a["href"]
+                    if PRESENTATION_RE.search(href) and href.startswith("http"):
+                        found.append(href)
+        except:
+            pass
+        return found
 
     def _search_ddgs(self, query: str) -> List[str]:
         found: List[str] = []
@@ -222,6 +256,13 @@ class SearchEngineJapanScraper:
             self._seen_tags.add(tag)
             return dest
         try:
+            # Pre-check file size via HEAD request to avoid wasting bandwidth
+            try:
+                head = self.session.head(url, timeout=10, verify=self.verify_ssl, allow_redirects=True)
+                cl = int(head.headers.get("Content-Length", 0))
+                if 0 < cl < 2097152:  # Skip files confirmed under 5MB
+                    return None
+            except: pass
             resp = self.session.get(url, timeout=self.timeout, stream=True, verify=self.verify_ssl)
             if not resp.ok: return None
             with open(dest, "wb") as f:

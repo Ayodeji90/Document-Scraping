@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import List, Optional, Set
 from urllib.parse import urlparse
 
+from src.utils.persistence import load_master_tags, save_new_tag
 import requests
 import urllib3
 from requests.adapters import HTTPAdapter
@@ -111,7 +112,7 @@ class JapanScraper:
         if not DDGS: return []
         try:
             with DDGS() as ddgs:
-                return [r['href'] for r in ddgs.text(q, max_results=100)]
+                return [r['href'] for r in ddgs.text(q, max_results=300)]
         except: return []
 
     def _download(self, url):

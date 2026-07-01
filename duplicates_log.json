@@ -1,0 +1,771 @@
+{
+  "timestamp": "2026-05-05T22:57:29.672193",
+  "total_duplicate_groups": 66,
+  "total_duplicate_files": 92,
+  "duplicates": [
+    {
+      "hash": "742183092b7863b6feb8ceec48ef9719",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_france/b354659c1f_SUIVPROJ.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_france/b92977c4dd_SUIVPROJ.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_france_b92977c4dd_SUIVPROJ.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "2d2fad73abccc04d9df69857dfb8ff27",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_france/d6d65e0462_Pre_sentationMireilleDucasseLirisSept2010.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_france/54fba0c788_Pre_sentationMireilleDucasseLirisSept2010.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_france_54fba0c788_Pre_sentationMireilleDucasseLirisSept2010.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "340a2c104f956962b91150c3377184d1",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/95e7b4e1ef_bruessel.ppt",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/541fa2ed31_bruessel.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_541fa2ed31_bruessel.ppt"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/1bc6ecf9b1_bruessel.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_1bc6ecf9b1_bruessel.ppt"
+        }
+      ]
+    },
+    {
+      "hash": "f2e87b17a816e6f9e2e7f8f26a3556c1",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/397283182b_slides1.ppt",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/c136172169_slides1.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_c136172169_slides1.ppt"
+        }
+      ]
+    },
+    {
+      "hash": "75e1389c0b21a7dd75982647c0555970",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/aa6f138d10_slides2.ppt",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/5546518454_slides2.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_5546518454_slides2.ppt"
+        }
+      ]
+    },
+    {
+      "hash": "dad8e9edfabefeaaf6b02bab7a26cc25",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/c657cecf05_ads_vorlesung.ppt",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/7f39be902a_ads_vorlesung.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_7f39be902a_ads_vorlesung.ppt"
+        }
+      ]
+    },
+    {
+      "hash": "b206aec6983cf01bfb699e995c47b561",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/8a42ef66b5_XML.ppt",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/c82df7ed8a_XML.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_c82df7ed8a_XML.ppt"
+        }
+      ]
+    },
+    {
+      "hash": "863c9dd147550669fcfdbeb6e2f47d3d",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/8d449ff66f_V3.ppt",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/d4c4f0d600_V3.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_d4c4f0d600_V3.ppt"
+        }
+      ]
+    },
+    {
+      "hash": "f8ae5cc71a5a32be5236b7b1c4324a9c",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/25ab455d70_0050_Modellorientierung_0030_Theorie.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/6282e80610_0050_Modellorientierung_0030_Theorie.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_6282e80610_0050_Modellorientierung_0030_Theorie.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "9c74f5e6034b6b8e14f0cc1c7df3796d",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/d09f0f494b_0050_Modellorientierung_0010_Einstieg.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/412c70af3e_0050_Modellorientierung_0010_Einstieg.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_412c70af3e_0050_Modellorientierung_0010_Einstieg.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "fd2a2862128d5fd7e9b3bffb10abd48f",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/a36360aa06_Das_anomale_magnetische_Moment_des_Myons.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/c198b12812_Vorlesung_22.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_c198b12812_Vorlesung_22.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/cd6c2c2bb4_Vorlesung_17.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_cd6c2c2bb4_Vorlesung_17.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/e59d4caec6_Vorlesung_15.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_e59d4caec6_Vorlesung_15.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/cb4380d9d5_Die_Entdeckung_der_Kernspaltung.Hannah_Eckert_03.05.24.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_cb4380d9d5_Die_Entdeckung_der_Kernspaltung.Hannah_Eckert_03.05.24.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/494850382b_Die_Vermessung_der_Radien_von_Atomkernen__des.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_494850382b_Die_Vermessung_der_Radien_von_Atomkernen__des.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/76ce29575a_Vorlesung_16.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_76ce29575a_Vorlesung_16.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/7bc4010c83_Vorlesung_18.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_7bc4010c83_Vorlesung_18.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/8bfb04045e_Vorlesung_13.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_8bfb04045e_Vorlesung_13.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/ced717d84c_Vorlesung_04.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_ced717d84c_Vorlesung_04.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/3c0ab27b2c_Die_Entdeckung_des__-Baryons_-_Dimitrij_Bathauer_-_10.5.24.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_3c0ab27b2c_Die_Entdeckung_des__-Baryons_-_Dimitrij_Bathauer_-_10.5.24.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/ff5a7d6065_Vorlesung_20.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_ff5a7d6065_Vorlesung_20.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/e7c48ac39b_Vorlesung_06.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_e7c48ac39b_Vorlesung_06.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/bf9df0a6ae_Vorlesung_14.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_bf9df0a6ae_Vorlesung_14.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/7b27b974f0_Vorlesung_02.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_7b27b974f0_Vorlesung_02.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/d3a1f59954_Praesentation_Tauon__Felix_Noth.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_d3a1f59954_Praesentation_Tauon__Felix_Noth.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/874b96eef1_Die_Entdeckung_der_neutralen_Stroeme.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_874b96eef1_Die_Entdeckung_der_neutralen_Stroeme.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/8c413afe5d_Vorlesung_07.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_8c413afe5d_Vorlesung_07.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/bdc9292b71_Vorlesung_05.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_bdc9292b71_Vorlesung_05.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/5a8155e184_Vorlesung_01.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_5a8155e184_Vorlesung_01.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/dd5d0306c9_Vorlesung_03.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_dd5d0306c9_Vorlesung_03.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "034adcace73ceef273cf058a0472bab9",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/184b4832f5_0050_Modellorientierung_CurriculumAutomatenFormaleSprachen.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/07e0860827_0050_Modellorientierung_CurriculumAutomatenFormaleSprachen.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_07e0860827_0050_Modellorientierung_CurriculumAutomatenFormaleSprachen.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "af94171d022bf19aa9eaae67995b6a97",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/3147c0ff1e_FokusAntibodies2021provisonal.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/6e9d0b45e3_FokusAntibodies2021provisonal.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_6e9d0b45e3_FokusAntibodies2021provisonal.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "918564fcbbe418c097e860cc5b65d360",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/3495170bf0_0050_Modellorientierung_0040_Thomas.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/2aff411af2_0050_Modellorientierung_0040_Thomas.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_2aff411af2_0050_Modellorientierung_0040_Thomas.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "2a8edf2f81b36ddcc0e603fd798c3fa9",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/5cdd9ae8ae_0050_Modellorientierung_0025_ModelltypenSek2NRW.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/255e247cdd_0050_Modellorientierung_0025_ModelltypenSek2NRW.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_255e247cdd_0050_Modellorientierung_0025_ModelltypenSek2NRW.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "e518e9bbd670aad5e987b4abbbbe91f5",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/8f4823b0a3_OER-Qualit_C3_A4t.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/119f9dba03_OER-Qualit_C3_A4t.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_119f9dba03_OER-Qualit_C3_A4t.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "9187f5eb4811dcfa12e149bfcde9a030",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/c34d9139fc_Seminarsitzung_205.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/b42cf29982_Seminarsitzung_205.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_b42cf29982_Seminarsitzung_205.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "5ea71f2c8cfd28daee9cdc65c7d13a58",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/50b5c1703f_Einleitung.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/bebeedb454_Einleitung.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_bebeedb454_Einleitung.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "d41d8cd98f00b204e9800998ecf8427e",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/b93ae2b864_KeynoteWelling.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/9a76f3cd61_sobha_anaphora_final.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_9a76f3cd61_sobha_anaphora_final.ppt"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/4395fc06ed_1741713112.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_4395fc06ed_1741713112.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "a3031d3712686d2f43a2e7670bb1f913",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/5299fb0c01_OER-_20Tools_20und_20Ausblick.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/2996cd4d99_OER-_20Tools_20und_20Ausblick.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_2996cd4d99_OER-_20Tools_20und_20Ausblick.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "fd234c43c7d6ce4cb7c8968139110e41",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/c41fa0af36_211108ls_Protein_20Expression_20and_20Purification_slides_20only.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/03180abf6c_211108ls_Protein_20Expression_20and_20Purification_slides_20only.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_03180abf6c_211108ls_Protein_20Expression_20and_20Purification_slides_20only.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "41be9a9f2f306fba0013d3bb4b6b13cc",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/7b9d3e5a0f_CCLizenzen.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/0d2ede0bfa_CCLizenzen.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_0d2ede0bfa_CCLizenzen.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "c14c65cf762f0978a3765413db74882e",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/b1ceeac4bb_0050_Modellorientierung_0020_Modelltypen.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/fad25ddc7a_0050_Modellorientierung_0020_Modelltypen.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_fad25ddc7a_0050_Modellorientierung_0020_Modelltypen.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "819cecea7a4ba595f6fd7f341b2abd20",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/e74ad65b4e_Didaktische_Prinzipien_OER.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/ecd85e31b8_Didaktische_Prinzipien_OER.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_ecd85e31b8_Didaktische_Prinzipien_OER.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "c8f9f39434852f4cc7f568ccb8cbf5d0",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/bc9cc5cb52_11-11_Folien_How2Studium2.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/2bc378e0d6_Folien_Pruefungen.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_2bc378e0d6_Folien_Pruefungen.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/278d7cfb78_09-22_Folien_How2Studium1_Gruppenarbeit.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_278d7cfb78_09-22_Folien_How2Studium1_Gruppenarbeit.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/8eb63920b4_09-12_Folien_Selbstgesteuertes_Lernen.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_8eb63920b4_09-12_Folien_Selbstgesteuertes_Lernen.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/ff868444ed_Folien_Kommunikation.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_ff868444ed_Folien_Kommunikation.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/0c1e745fef_Folien_Zeitmanagement.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_0c1e745fef_Folien_Zeitmanagement.pptx"
+        },
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/a511223222_Folien_Einfu_hrung.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_a511223222_Folien_Einfu_hrung.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "715486cd789df3c34ca225a0a4dae3cb",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/ba161add12_Geiger_20Vorlesung_20fokus_20methods_20of_20life_20sciences_202022.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/ea3872655f_Geiger_20Vorlesung_20fokus_20methods_20of_20life_20sciences_202022.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_ea3872655f_Geiger_20Vorlesung_20fokus_20methods_20of_20life_20sciences_202022.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "256846a5555b1bdabcee74fd3e7813fa",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/9b709711e8_Praesentation_HT_2019_final.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/09ec74391a_praesentation-ht-2019_final.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_09ec74391a_praesentation-ht-2019_final.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "8fdd076340b301f873548fbb7896cc97",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/488236eadc_0050__OrigProfFDIB3_20Informatisches_20Modellieren.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/ba5ae05f0a_0050__OrigProfFDIB3_20Informatisches_20Modellieren.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_ba5ae05f0a_0050__OrigProfFDIB3_20Informatisches_20Modellieren.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "a70692d0adebfb5d062982439ec1229d",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/050d2bf7fb_0050__OrigProfFDIB2InformationsorientierungUndZentrierung.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/21235d13b8_0050__OrigProfFDIB2InformationsorientierungUndZentrierung.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_21235d13b8_0050__OrigProfFDIB2InformationsorientierungUndZentrierung.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "c4f1749c3c37fea389aaefaf671f627a",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/648b945738_Presentation_Helmholtz_Postdoc_Guidelines.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/d5b70be7b9_Presentation_Helmholtz_Postdoc_Guidelines.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_d5b70be7b9_Presentation_Helmholtz_Postdoc_Guidelines.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "0eca53d85b7cca25f4b106fef4fe9a98",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/ee1d59d4f1_0050_Modellorientierung_EinstiegAutomaten.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/cbbc9df30f_0050_Modellorientierung_EinstiegAutomaten.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_cbbc9df30f_0050_Modellorientierung_EinstiegAutomaten.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "03dc4a00236cc59439eda301f96cfee3",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/0357271d27_Seminarsitzung_203.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_germany/21a37f5867_Seminarsitzung_203.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_germany_21a37f5867_Seminarsitzung_203.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "ef9707c0e55f7007aa3e91a9ee545259",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/95dbc0dc80_java_lect_05.ppt",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/a466f66e1f_java_lect_01.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_a466f66e1f_java_lect_01.ppt"
+        }
+      ]
+    },
+    {
+      "hash": "5ce4692e47ddf16ce228e422a8b7b1ec",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/c5af7cc1af_Biophysical-Chemistry-Enzymology-Modified-2.ppt",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/9a8ca50dd4_Biophysical-Chemistry-Enzymology-Modified-1.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_9a8ca50dd4_Biophysical-Chemistry-Enzymology-Modified-1.ppt"
+        }
+      ]
+    },
+    {
+      "hash": "74b822ec9a21d9f719c5852944f76d4c",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/64b2102db6_1741713046.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/9f05d22bdd_1742717681.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_9f05d22bdd_1742717681.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "ad7572561c1d178f15bc4f5c5b970cc8",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/4a62abbe60_1758437496.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/175d6d75c3_1726222476.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_175d6d75c3_1726222476.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "81b883d161aa8f3ecb55492cb31f16db",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/06333cd91f_1763789006.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/ff702e827f_1763788535.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_ff702e827f_1763788535.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "5e755fadbbee027486f440c37b30555b",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/edaae8f981_1731155571.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/b35e67531a_1732022253.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_b35e67531a_1732022253.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "47dcb7d6100278c68660acdb8ebb3b99",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/55d569d945_1726222683.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/b1765513f2_1758440034.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_b1765513f2_1758440034.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "ad2d5b74e34626424fa6f11e40f84457",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/f5809569c3_1725803251.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/233928e435_1758437222.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_233928e435_1758437222.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "a3f60675f16b2420f8199ee062101de3",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/32636ccbfc_1758441071.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/580e6b39ef_1731938369.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_580e6b39ef_1731938369.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "2bced8cf54866814ba2e7f8f04f2f0df",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/89e2137f31_1726222160.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/7133c37758_1726222273.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_7133c37758_1726222273.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "032dee055d10e6a84947555eb1c88324",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/ed8e4171a7_1726143517.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/1dbebce374_1758439972.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_1dbebce374_1758439972.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "76fd75ff7457cfefe95581edf5475064",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/2e51c5be1b_1742716640.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/42076030fb_1743786684.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_42076030fb_1743786684.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "1b6a9ab21b70347f30b497f2aa65dcbe",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/bacd899c6f_1731345226.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_india/9bab152d94_1758439677.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_india_9bab152d94_1758439677.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "cc14a202fdd0920103d848d9909720ff",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_italy/2c765816cb_BioinfoBM_3.ppt",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_italy/f733c7305b_BioinfoBM_3.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_italy_f733c7305b_BioinfoBM_3.ppt"
+        }
+      ]
+    },
+    {
+      "hash": "37e4c022ea37b208771c3cd2e5c963fb",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_italy/ae4ac445db_04.6.Slide22.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_italy/08c9dba190_04.6.Slide22.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_italy_08c9dba190_04.6.Slide22.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "b12436f21e2f37ff33ed0219548ddd25",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_japan/7aedc6590d_den-mohrcircle.ppt",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_japan/7cf38b1441_den-mohrcircle.ppt",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_japan_7cf38b1441_den-mohrcircle.ppt"
+        }
+      ]
+    },
+    {
+      "hash": "2f3c46ebbc15bf390beb905c7b9ea643",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_japan/97ffaf504f_sample-pp1.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_japan/a07c20d431_sample-pp1.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_japan_a07c20d431_sample-pp1.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "688e7f6939058b885f3bc2213e9d97e0",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/f3f0ed087e_flow.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/20934b22d0_flow.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_nordics_20934b22d0_flow.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "8133ffaafcd52b8949700b00e90e2229",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/af17eb0b8d_tries.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/7006beb90b_tries.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_nordics_7006beb90b_tries.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "f3ba939a4844de3f9e76eea1ee8fa819",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/d8d98c8af0_repetition.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/5e2d700543_repetition.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_nordics_5e2d700543_repetition.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "250e78ea0bccaf781117b2717491e3c0",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/2756b383a0_divide.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/21992507d0_divide.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_nordics_21992507d0_divide.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "928a802bdfd75e0038635c3013493243",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/339bbdc9a3_patternmatching.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/abe5871214_patternmatching.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_nordics_abe5871214_patternmatching.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "fedeb646b8e607925a913de9be62d4be",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/fcfe6c6c55_mst.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/b81c50004d_mst.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_nordics_b81c50004d_mst.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "257af3b24e070b385990b3ef4d52d35a",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/69531ac858_graphs.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/21ae29fb36_graphs.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_nordics_21ae29fb36_graphs.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "982b7688ab4956ae860238ba7d9d9507",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/bc0baf893e_shortestpaths-sssp.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/91d85f952f_shortestpaths-sssp.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_nordics_91d85f952f_shortestpaths-sssp.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "17e3a46cb82c948a06a45480f3a66884",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/3bf85dd84d_greedy.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/8325c80039_greedy.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_nordics_8325c80039_greedy.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "ab9015658d9b08a85246306bb1882471",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/9cdec22b11_PPT_ENG_169.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/e0359abf06_PPT_ENG_230523.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_nordics_e0359abf06_PPT_ENG_230523.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "8d658c65f07775eb140d2c0fd348aeb7",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/eb079f9e4c_topologicalsort.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_nordics/6526774917_topologicalsort.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_nordics_6526774917_topologicalsort.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "c6c11dc7c516d6f12039f437d5ba4861",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_spain/f122f868a3_compose.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_spain/b9e3d0ce7a_compose.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_spain_b9e3d0ce7a_compose.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "81f7ef19092a6f301725b2bbe25f2de9",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_spain/ceb849323d_PresentacioConsell.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_spain/c20d707d9c_presentacioconsell.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_spain_c20d707d9c_presentacioconsell.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "9ac58c9c4004d7c2fab35dd1fb24fc65",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_uk/292ce3fa5d_JCM-2373852_Caco-2-HepaRG_Cell_Culture_Media_Optimisation.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_uk/d4475d7c09_JCM-2373852_Caco-2-HepaRG_Cell_Culture_Media_Optimisation.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_uk_d4475d7c09_JCM-2373852_Caco-2-HepaRG_Cell_Culture_Media_Optimisation.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "77e35630cd509e4e44b6249d6aa3ae5a",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_uk/d062c64f7e_Table_3_full_length_RM_4NP_octanoate_curves_Michaelis_Menten.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_uk/e71929929b_Table_203_20full_20length_20RM_204NP_20octanoate_20curves_20Michaelis_20Menten.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_uk_e71929929b_Table_203_20full_20length_20RM_204NP_20octanoate_20curves_20Michaelis_20Menten.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "95748612f30e7eca34e344719a1c4f75",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_uk/9394330a4e_The_20Edinburgh_20lobar_20ICH_20CAA_20criteria_B_26W.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_uk/190c6ad21f_The_Edinburgh_lobar_ICH_CAA_criteria_B_W.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_uk_190c6ad21f_The_Edinburgh_lobar_ICH_CAA_criteria_B_W.pptx"
+        }
+      ]
+    },
+    {
+      "hash": "29854cd0ab18c1853fe4520323c79e82",
+      "original_kept": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_uk/619a42c27d_Western_20blots_20full_20ncomms.pptx",
+      "duplicates_moved": [
+        {
+          "from": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/downloaded_ppts_uk/365b4b846e_Western_blots_full_ncomms.pptx",
+          "to": "/home/machinemustlearn/WORKSPACE/AI_ML_PROJS/Document-Scraping/duplicates/downloaded_ppts_uk_365b4b846e_Western_blots_full_ncomms.pptx"
+        }
+      ]
+    }
+  ]
+}

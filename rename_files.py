@@ -17,20 +17,20 @@ def rename_files_sequentially(target_dir="downloaded_ppts", start_index=1):
         print("No .ppt/.pptx files found in directory.")
         return
 
-    print(f"Found {len(files)} files. Renaming sequentially starting from {start_index:05d}...")
+    print(f"Found {len(files)} files. Renaming sequentially starting from {start_index:06d}...")
     
     mapping_file = directory / "rename_mapping.log"
     
     # Open in append mode to keep history if needed, but for a clean rename 
     # the user might want to overwrite. We'll append for safety.
     with open(mapping_file, "a", encoding="utf-8") as log:
-        log.write(f"\n--- Rename Session starting at {start_index:05d} ---\n")
+        log.write(f"\n--- Rename Session starting at {start_index:06d} ---\n")
         log.write("New Name | Original Name\n")
         log.write("-" * 50 + "\n")
         
         for i, file_path in enumerate(files, start=start_index):
             extension = file_path.suffix
-            new_name = f"{i:05d}{extension}"
+            new_name = f"{i:06d}{extension}"
             new_path = directory / new_name
             
             # Skip if it's already named that way (to avoid errors on re-runs)

@@ -1,0 +1,19 @@
+{
+  "description": "Blacklisted or notorious piracy domains. No content may be sourced from these domains per criteria1 §2.",
+  "blocked_domains": [
+    "sci-hub.se", "sci-hub.st", "sci-hub.ru", "sci-hub.tw", "sci-hub.do",
+    "libgen.rs", "libgen.is", "libgen.st", "libgen.li", "library.lol",
+    "z-library.org", "z-lib.org", "z-lib.is", "zlibrary.to", "singlelogin.re",
+    "annas-archive.org", "annas-archive.se",
+    "thepiratebay.org", "1337x.to", "rarbg.to", "torrentz2.eu",
+    "slideshare.net",
+    "coursehero.com", "chegg.com", "studocu.com",
+    "scribd.com",
+    "warez-bb.org", "rlsbb.ru",
+    "uploaded.net", "rapidgator.net",
+    "4shared.com", "mediafire.com",
+    "vk.com",
+    "b-ok.org", "b-ok.cc", "bookfi.net", "bookzz.org"
+  ],
+  "notes": "This list covers well-known piracy, unauthorized academic content sharing, and file-locker sites frequently used for copyright infringement. Update as needed."
+}

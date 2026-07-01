@@ -10,9 +10,10 @@ Key facts verified April 2026:
 import logging
 import re
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from .base import BaseScraper
+from src.metadata import build_metadata_from_api
 
 logger = logging.getLogger(__name__)
 
@@ -44,14 +45,7 @@ class ZenodoScraper(BaseScraper):
         super().__init__(**kwargs)
 
     def _extract_ppt_files(self, record: Dict) -> List[Dict]:
-        """
-        Extract PPT/PPTX entries from a Zenodo record.
-
-        API response (April 2026): record['files'] is a list of:
-          {"key": "file.pptx", "links": {"self": "https://zenodo.org/api/records/{id}/files/{name}"}}
-
-        Download URL = links['self'] + '/content'
-        """
+        """Extract PPT/PPTX entries from a Zenodo record."""
         ppt_files = []
         files_obj = record.get("files")
 
@@ -61,7 +55,6 @@ class ZenodoScraper(BaseScraper):
                 if key.lower().endswith((".ppt", ".pptx")):
                     links = entry.get("links", {})
                     self_url = links.get("self", "")
-                    # Append /content to get the actual binary download
                     if self_url and not self_url.endswith("/content"):
                         url = self_url + "/content"
                     else:
@@ -115,7 +108,8 @@ class ZenodoScraper(BaseScraper):
                 ppt_files = self._extract_ppt_files(record)
 
                 for f in ppt_files:
-                    results.append({
+                    full_record = dict(record)
+                    full_record.update({
                         "url": f["url"],
                         "key": f["key"],
                         "title": title,
@@ -123,6 +117,7 @@ class ZenodoScraper(BaseScraper):
                         "source": "zenodo",
                         "query": query,
                     })
+                    results.append(full_record)
                     if len(results) >= max_results:
                         break
                 if len(results) >= max_results:
@@ -152,7 +147,11 @@ class ZenodoScraper(BaseScraper):
                 ext = ".ppt" if r["key"].lower().endswith(".ppt") else ".pptx"
                 safe = re.sub(r"[^\w\-]", "_", r["title"][:80])
                 filename = f"zenodo_{r['record_id']}_{safe}{ext}"
-                fp = self._download_file(r["url"], filename)
+                
+                # Build rich metadata
+                meta = build_metadata_from_api("zenodo", r, r["url"], filename)
+                
+                fp = self._download_file(r["url"], filename, meta)
                 if fp:
                     downloaded.append(fp)
                     print(f"  [Zenodo] {len(downloaded)}/{max_docs} — {fp.name}")
