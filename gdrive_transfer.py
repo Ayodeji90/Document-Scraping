@@ -116,37 +116,79 @@ def authenticate(token_path: Path, scopes: list, label: str):
 
 # ── File Listing ──────────────────────────────────────────────────────────────
 
-def list_ppt_files(service, folder_id: str) -> Generator[dict, None, None]:
-    query = (
-        f"'{folder_id}' in parents "
-        f"and (name contains '.pptx' or name contains '.ppt') "
-        f"and trashed=false"
-    )
+PPT_MIMETYPES = {
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",  # .pptx
+    "application/vnd.ms-powerpoint",  # .ppt
+}
+FOLDER_MIMETYPE = "application/vnd.google-apps.folder"
+
+
+def _list_folder_items(service, folder_id: str, fields: str) -> list:
+    """List all items (one page at a time) in a single folder."""
+    items = []
+    page_token = None
+    while True:
+        try:
+            resp = service.files().list(
+                q=f"'{folder_id}' in parents and trashed=false",
+                fields=fields,
+                pageSize=1000,
+                pageToken=page_token,
+            ).execute()
+        except HttpError as e:
+            logger.error("Error listing folder %s: %s", folder_id, e)
+            break
+        items.extend(resp.get("files", []))
+        page_token = resp.get("nextPageToken")
+        if not page_token:
+            break
+    return items
+
+
+def debug_folder(service, folder_id: str):
+    """Print what's directly inside the folder to help diagnose 0-file issues."""
+    fields = "nextPageToken, files(id, name, mimeType, size)"
+    items = _list_folder_items(service, folder_id, fields)
+    print(f"\n── Folder contents ({len(items)} items) ──────────────────")
+    for item in items[:40]:
+        size = item.get("size", "?")
+        print(f"  [{item['mimeType'].split('.')[-1]:>12}]  {item['name']}  ({size} bytes)")
+    if len(items) > 40:
+        print(f"  … and {len(items) - 40} more")
+    print("─────────────────────────────────────────────────────\n")
+    return items
+
+
+def list_ppt_files(service, folder_id: str, recursive: bool = True) -> Generator[dict, None, None]:
+    """Yield all .ppt/.pptx files in the folder, optionally traversing subfolders."""
     fields = (
         "nextPageToken, files("
         "id, name, size, createdTime, modifiedTime, "
         "owners, webViewLink, mimeType"
         ")"
     )
-    page_token = None
     total = 0
-    while True:
-        try:
-            resp = service.files().list(
-                q=query,
-                fields=fields,
-                pageSize=1000,
-                pageToken=page_token,
-            ).execute()
-        except HttpError as e:
-            logger.error("Error listing files: %s", e)
-            break
-        for f in resp.get("files", []):
-            total += 1
-            yield f
-        page_token = resp.get("nextPageToken")
-        if not page_token:
-            break
+    folders_to_scan = [folder_id]
+
+    while folders_to_scan:
+        current = folders_to_scan.pop(0)
+        items = _list_folder_items(service, current, fields)
+
+        for item in items:
+            mime = item.get("mimeType", "")
+            name = item.get("name", "")
+
+            if mime == FOLDER_MIMETYPE and recursive:
+                folders_to_scan.append(item["id"])
+                continue
+
+            is_ppt_mime = mime in PPT_MIMETYPES
+            is_ppt_name = re.search(r"\.pptx?$", name, re.I)
+
+            if is_ppt_mime or is_ppt_name:
+                total += 1
+                yield item
+
     logger.info("Total source files found: %d", total)
 
 # ── Download ──────────────────────────────────────────────────────────────────
@@ -350,6 +392,8 @@ def main():
     parser.add_argument("--source-folder", default=SOURCE_FOLDER_ID, help="Source Google Drive folder ID")
     parser.add_argument("--dest-name", default="50K_Validated", help="Name for the new destination folder")
     parser.add_argument("--skip-search", action="store_true", help="Skip DuckDuckGo source URL search (faster)")
+    parser.add_argument("--debug", action="store_true", help="List folder contents and exit (diagnose access issues)")
+    parser.add_argument("--no-recursive", action="store_true", help="Do not scan subfolders")
     args = parser.parse_args()
 
     setup_logging()
@@ -365,6 +409,12 @@ def main():
 
     print("[2/2] Authenticating DESTINATION account (5TB Google Drive)…")
     dst_svc = authenticate(DEST_TOKEN, SCOPES_RW, "DESTINATION — new account")
+
+    # ── Debug mode ────────────────────────────────────────────────────────────
+    if args.debug:
+        print(f"\nDEBUG: Listing contents of source folder {args.source_folder}")
+        debug_folder(src_svc, args.source_folder)
+        return
 
     # ── Setup ─────────────────────────────────────────────────────────────────
     blocklist = load_blocklist()
@@ -387,7 +437,7 @@ def main():
     logger.info("Scanning source folder %s…", args.source_folder)
 
     # ── Process files ─────────────────────────────────────────────────────────
-    for drive_file in list_ppt_files(src_svc, args.source_folder):
+    for drive_file in list_ppt_files(src_svc, args.source_folder, recursive=not args.no_recursive):
         file_id  = drive_file["id"]
         filename = drive_file["name"]
 
