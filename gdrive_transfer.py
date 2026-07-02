@@ -57,8 +57,9 @@ except ImportError:
 # ── Constants ─────────────────────────────────────────────────────────────────
 
 SOURCE_FOLDER_ID = "1eShoyLCH1ulzGUtlYHLiaIIbrBohUJkZ"
-BATCH_ID         = "50K_01"
+BATCH_ID         = "BATCH_01"
 MIN_SLIDES       = 5
+METADATA_UPLOAD_INTERVAL = 200  # upload metadata.jsonl to Drive every N files
 
 SOURCE_TOKEN = Path("source_token.pickle")
 DEST_TOKEN   = Path("dest_token.pickle")
@@ -351,8 +352,8 @@ def build_metadata(drive_file: dict, analysis: dict, source_url: str) -> dict:
 
 # ── Upload ────────────────────────────────────────────────────────────────────
 
-def upload_file(service, filepath: Path, folder_id: str, retries: int = 4) -> Optional[str]:
-    file_metadata = {"name": filepath.name, "parents": [folder_id]}
+def upload_file(service, filepath: Path, folder_id: str, upload_name: str, retries: int = 4) -> Optional[str]:
+    file_metadata = {"name": upload_name, "parents": [folder_id]}
     for attempt in range(retries):
         try:
             media = MediaFileUpload(str(filepath), resumable=True)
@@ -370,15 +371,38 @@ def upload_file(service, filepath: Path, folder_id: str, retries: int = 4) -> Op
                 return None
     return None
 
+
+def upload_or_replace_metadata(service, local_path: Path, folder_id: str, remote_filename: str):
+    """Upload metadata.jsonl to Drive, replacing existing copy if present."""
+    try:
+        resp = service.files().list(
+            q=f"'{folder_id}' in parents and name='{remote_filename}' and trashed=false",
+            fields="files(id)",
+        ).execute()
+        existing = resp.get("files", [])
+        media = MediaFileUpload(str(local_path), mimetype="application/json", resumable=False)
+        if existing:
+            service.files().update(fileId=existing[0]["id"], media_body=media).execute()
+        else:
+            service.files().create(
+                body={"name": remote_filename, "parents": [folder_id]},
+                media_body=media, fields="id"
+            ).execute()
+        logger.info("Metadata synced to Drive: %s", remote_filename)
+    except Exception as e:
+        logger.warning("Metadata upload failed: %s", e)
+
 # ── Progress ──────────────────────────────────────────────────────────────────
 
 def load_progress() -> dict:
     if PROGRESS.exists():
         try:
-            return json.loads(PROGRESS.read_text(encoding="utf-8"))
+            p = json.loads(PROGRESS.read_text(encoding="utf-8"))
+            p.setdefault("file_counter", 0)
+            return p
         except Exception:
             pass
-    return {"done": [], "failed": [], "rejected": [], "dest_folder_id": None}
+    return {"done": [], "failed": [], "rejected": [], "dest_folder_id": None, "file_counter": 0}
 
 
 def save_progress(p: dict):
@@ -473,12 +497,22 @@ def main():
 
             # 3. Enrich metadata
             source_url = "" if args.skip_search else search_source_url(filename)
-            meta = build_metadata(drive_file, analysis, source_url)
 
-            # 4. Upload to destination
-            uploaded_id = upload_file(dst_svc, tmp, dest_folder_id)
+            # 4. Sequential file naming: BATCH_01_000028.pptx
+            progress["file_counter"] += 1
+            counter = progress["file_counter"]
+            ext = Path(filename).suffix.lower() or ".pptx"
+            upload_name = f"BATCH_01_{counter:06d}{ext}"
+
+            meta = build_metadata(drive_file, analysis, source_url)
+            meta["upload_filename"] = upload_name
+            meta["sequence_number"] = counter
+
+            # 5. Upload PPTX with new sequential name
+            uploaded_id = upload_file(dst_svc, tmp, dest_folder_id, upload_name)
             if not uploaded_id:
                 logger.warning("  FAILED upload — skipping")
+                progress["file_counter"] -= 1  # give back counter
                 progress["failed"].append(file_id)
                 stats["failed"] += 1
                 save_progress(progress)
@@ -486,14 +520,22 @@ def main():
 
             meta["dest_file_id"] = uploaded_id
 
-            # 5. Record
+            # 6. Upload per-file metadata sidecar as .json alongside the PPTX
+            meta_tmp = TEMP_DIR / f"{upload_name}.meta.json"
+            meta_tmp.write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
+            upload_file(dst_svc, meta_tmp, dest_folder_id, f"{upload_name}.meta.json")
+            meta_tmp.unlink(missing_ok=True)
+
+            # 7. Append to local metadata.jsonl and audit log
             with open(META_LOG, "a", encoding="utf-8") as f:
                 f.write(json.dumps(meta, ensure_ascii=False) + "\n")
 
             with open(AUDIT_LOG, "a", encoding="utf-8") as f:
                 audit = {
                     "batch_id": BATCH_ID,
-                    "filename": filename,
+                    "sequence_number": counter,
+                    "original_filename": filename,
+                    "upload_filename": upload_name,
                     "source_file_id": file_id,
                     "dest_file_id": uploaded_id,
                     "transferred_at": datetime.now(timezone.utc).isoformat(),
@@ -510,11 +552,16 @@ def main():
             stats["transferred"] += 1
             save_progress(progress)
 
+            # 8. Sync metadata.jsonl to Drive every N files
+            if stats["transferred"] % METADATA_UPLOAD_INTERVAL == 0:
+                upload_or_replace_metadata(dst_svc, META_LOG, dest_folder_id, "metadata.jsonl")
+                upload_or_replace_metadata(dst_svc, AUDIT_LOG, dest_folder_id, "audit_log.jsonl")
+
             logger.info(
-                "  OK [%s, %d slides, url=%s]",
+                "  OK %s [%s, %d slides]",
+                upload_name,
                 analysis.get("quality"),
                 analysis.get("slide_count", 0),
-                (source_url or "no-url")[:70],
             )
 
         finally:
@@ -522,6 +569,11 @@ def main():
                 tmp.unlink()
 
         time.sleep(0.3)
+
+    # ── Final metadata sync to Drive ─────────────────────────────────────────
+    logger.info("Syncing final metadata.jsonl and audit_log.jsonl to Drive…")
+    upload_or_replace_metadata(dst_svc, META_LOG, dest_folder_id, "metadata.jsonl")
+    upload_or_replace_metadata(dst_svc, AUDIT_LOG, dest_folder_id, "audit_log.jsonl")
 
     # ── Summary ───────────────────────────────────────────────────────────────
     print("\n" + "=" * 55)
