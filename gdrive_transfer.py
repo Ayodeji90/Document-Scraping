@@ -203,7 +203,26 @@ def download_file(service, file_id: str, dest: Path, retries: int = 4) -> bool:
             done = False
             while not done:
                 _, done = dl.next_chunk()
-            dest.write_bytes(buf.getvalue())
+            content = buf.getvalue()
+            if len(content) < 1000:
+                # Empty or near-empty — try export API (catches native Google Slides files)
+                try:
+                    req2 = service.files().export_media(
+                        fileId=file_id,
+                        mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    )
+                    buf2 = io.BytesIO()
+                    dl2 = MediaIoBaseDownload(buf2, req2, chunksize=8 * 1024 * 1024)
+                    done2 = False
+                    while not done2:
+                        _, done2 = dl2.next_chunk()
+                    content = buf2.getvalue()
+                except Exception:
+                    pass
+            if len(content) < 1000:
+                logger.warning("  Empty download for %s (%d bytes) — skipping", file_id, len(content))
+                return False
+            dest.write_bytes(content)
             return True
         except HttpError as e:
             if e.resp.status in (403, 429):
@@ -280,6 +299,15 @@ def analyse_pptx(filepath: Path) -> dict:
             "modified": props.modified.isoformat() if props.modified else "",
         }
     except Exception as e:
+        # If the file is large enough to be a real presentation but python-pptx
+        # can't parse it (unusual PPTX variant), accept it rather than discard it.
+        size = filepath.stat().st_size if filepath.exists() else 0
+        if size >= 50_000:
+            return {
+                "slide_count": MIN_SLIDES,
+                "quality": "UNKNOWN",
+                "parse_error": str(e),
+            }
         return {"error": str(e)}
 
 
