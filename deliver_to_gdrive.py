@@ -29,9 +29,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-BATCH_ID = "50K_01"
+BATCH_ID = "BATCH_02"
 MIN_SLIDES = 5
-DELIVERED_LOG = Path("logs/delivered_50k01.txt")
+DELIVERED_LOG = Path("logs/delivered_batch02.txt")
 SCRAPER_DIRS = ["africa", "asia", "europe", "north_america", "south_america", "oceania"]
 
 
@@ -152,9 +152,16 @@ def process_file(
     sidecar = read_sidecar(filepath)
     meta = build_metadata(filepath, analysis, sidecar)
 
+    # Copy PPTX (already named BATCH_02_XXXXXX — no rename needed)
     dest = files_dir / filepath.name
     if not dest.exists():
         shutil.copy2(str(filepath), str(dest))
+
+    # Copy per-file .meta.json sidecar alongside the PPTX
+    sidecar_src = filepath.with_suffix(".meta.json")
+    sidecar_dst = files_dir / sidecar_src.name
+    if sidecar_src.exists() and not sidecar_dst.exists():
+        shutil.copy2(str(sidecar_src), str(sidecar_dst))
 
     with open(metadata_log, "a", encoding="utf-8") as f:
         f.write(json.dumps(meta, ensure_ascii=False) + "\n")
