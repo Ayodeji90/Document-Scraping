@@ -49,7 +49,7 @@ def save_file_metadata(filepath: Path, source_url: str, extra: dict = None) -> P
     Returns the new file path."""
     num = get_next_batch02_number()
     ext = filepath.suffix.lower() or ".pptx"
-    new_name = f"BATCH_02_{num:06d}{ext}"
+    new_name = f"BATCH_02_names_{num:06d}{ext}"
     new_path = filepath.parent / new_name
 
     try:

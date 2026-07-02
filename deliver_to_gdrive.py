@@ -152,16 +152,18 @@ def process_file(
     sidecar = read_sidecar(filepath)
     meta = build_metadata(filepath, analysis, sidecar)
 
-    # Copy PPTX (already named BATCH_02_XXXXXX — no rename needed)
+    # Copy PPTX to Drive (already named BATCH_02_names_XXXXXX by persistence.py)
     dest = files_dir / filepath.name
     if not dest.exists():
         shutil.copy2(str(filepath), str(dest))
 
-    # Copy per-file .meta.json sidecar alongside the PPTX
-    sidecar_src = filepath.with_suffix(".meta.json")
-    sidecar_dst = files_dir / sidecar_src.name
-    if sidecar_src.exists() and not sidecar_dst.exists():
-        shutil.copy2(str(sidecar_src), str(sidecar_dst))
+    # Always write per-file .meta.json sidecar in Drive (generate from meta dict).
+    # This guarantees every file in Drive has its own JSON even if the scraper
+    # wasn't patched to write one locally.
+    sidecar_dst = files_dir / (filepath.stem + ".meta.json")
+    if not sidecar_dst.exists():
+        with open(sidecar_dst, "w", encoding="utf-8") as f:
+            json.dump(meta, f, ensure_ascii=False, indent=2)
 
     with open(metadata_log, "a", encoding="utf-8") as f:
         f.write(json.dumps(meta, ensure_ascii=False) + "\n")
