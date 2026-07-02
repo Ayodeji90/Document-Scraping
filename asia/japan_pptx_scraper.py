@@ -31,7 +31,7 @@ from pathlib import Path
 from typing import List, Optional, Set
 from urllib.parse import urljoin, urlparse
 
-from src.utils.persistence import load_master_tags, save_new_tag
+from src.utils.persistence import load_master_tags, save_new_tag, save_file_metadata
 import requests
 import urllib3
 from bs4 import BeautifulSoup
@@ -268,6 +268,7 @@ class SearchEngineJapanScraper:
             with open(dest, "wb") as f:
                 for chunk in resp.iter_content(65536): f.write(chunk)
             print(f"  Downloaded: {dest.name} ({dest.stat().st_size // 1024} KB)")
+            dest = save_file_metadata(dest, url)
             return dest
         except: return None
 
