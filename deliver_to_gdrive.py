@@ -15,6 +15,7 @@ Usage:
 
 import argparse
 import json
+import re
 import shutil
 import time
 import logging
@@ -22,6 +23,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse
+
+from src.utils.persistence import get_next_batch02_number
+
+BATCH02_NAME_RE = re.compile(r'^BATCH_02_names_\d+\.(pptx|ppt)$', re.IGNORECASE)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -152,15 +157,22 @@ def process_file(
     sidecar = read_sidecar(filepath)
     meta = build_metadata(filepath, analysis, sidecar)
 
-    # Copy PPTX to Drive (already named BATCH_02_names_XXXXXX by persistence.py)
-    dest = files_dir / filepath.name
+    # Assign BATCH_02_names_XXXXXX name if scraper didn't already rename the file
+    if BATCH02_NAME_RE.match(filepath.name):
+        dest_name = filepath.name
+    else:
+        num = get_next_batch02_number()
+        dest_name = f"BATCH_02_names_{num:06d}{filepath.suffix.lower() or '.pptx'}"
+
+    meta["filename"] = dest_name
+
+    # Copy PPTX to Drive under the correct BATCH_02_names_ name
+    dest = files_dir / dest_name
     if not dest.exists():
         shutil.copy2(str(filepath), str(dest))
 
-    # Always write per-file .meta.json sidecar in Drive (generate from meta dict).
-    # This guarantees every file in Drive has its own JSON even if the scraper
-    # wasn't patched to write one locally.
-    sidecar_dst = files_dir / (filepath.stem + ".meta.json")
+    # Always write per-file .meta.json alongside the PPTX in Drive
+    sidecar_dst = files_dir / (Path(dest_name).stem + ".meta.json")
     if not sidecar_dst.exists():
         with open(sidecar_dst, "w", encoding="utf-8") as f:
             json.dump(meta, f, ensure_ascii=False, indent=2)
@@ -187,8 +199,9 @@ def process_file(
 
     mark_delivered(filepath.name)
     logger.info(
-        "DELIVERED %s [%s, %d slides, url=%s]",
+        "DELIVERED %s → %s [%s, %d slides, url=%s]",
         filepath.name,
+        dest_name,
         analysis.get("quality"),
         analysis.get("slide_count", 0),
         (meta["source_url"] or "no-url")[:70],
@@ -251,7 +264,7 @@ def main():
     else:
         n = scan_and_deliver(gdrive_path)
         total_in_drive = sum(1 for _ in (gdrive_path / "files").glob("*"))
-        logger.info("Done — %d delivered. Total in 50K_01: %d", n, total_in_drive)
+        logger.info("Done — %d delivered. Total in BATCH_02: %d", n, total_in_drive)
 
 
 if __name__ == "__main__":
