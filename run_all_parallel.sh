@@ -1,105 +1,89 @@
 #!/bin/bash
-# Runs all country scrapers in parallel tmux windows.
-# Usage: bash run_all_parallel.sh
-# Reattach anytime with: tmux attach -t scrapers
+# Launches ALL country scrapers + bulk sources in parallel tmux windows.
+# Auto-discovers every *_scraper.py in region folders (skips colab_* scripts).
+#
+# Usage:
+#   bash run_all_parallel.sh              # default target 10000
+#   TARGET=5000 bash run_all_parallel.sh  # custom target
+#
+# Inside tmux:
+#   Attach      : tmux attach -t scrapers
+#   List windows: tmux list-windows -t scrapers
+#   Switch      : Ctrl+B then W
+#   Detach      : Ctrl+B then D
+#   Kill all    : tmux kill-session -t scrapers
 
 SESSION="scrapers"
-VENV="$(dirname "$0")/venv/bin/activate"
 ROOT="$(cd "$(dirname "$0")" && pwd)"
+VENV="$ROOT/venv/bin/activate"
 TARGET="${TARGET:-10000}"
 FLAGS="--target $TARGET --no-verify-ssl"
 
-# Kill existing session if present
+# Kill any existing session cleanly
 tmux kill-session -t "$SESSION" 2>/dev/null
+sleep 1
 
-# All scrapers grouped: [window_name]="script_path"
-declare -A SCRAPERS=(
-  # Asia
-  [india]="asia/india_pptx_scraper.py"
-  [japan]="asia/japan_pptx_scraper.py"
-  [south_korea]="asia/south_korea_pptx_scraper.py"
-  [china]="asia/china_pptx_scraper.py"
-  [indonesia]="asia/indonesia_pptx_scraper.py"
-  [thailand]="asia/thailand_pptx_scraper.py"
-  [vietnam]="asia/vietnam_pptx_scraper.py"
-  [malaysia]="asia/malaysia_pptx_scraper.py"
-  [singapore]="asia/singapore_pptx_scraper.py"
-  [taiwan]="asia/taiwan_pptx_scraper.py"
-  [hong_kong]="asia/hong_kong_pptx_scraper.py"
-  [philippines]="asia/philippines_pptx_scraper.py"
-  [bangladesh]="asia/bangladesh_pptx_scraper.py"
-  [pakistan]="asia/pakistan_pptx_scraper.py"
-  [sri_lanka]="asia/sri_lanka_pptx_scraper.py"
-  [israel]="asia/israel_pptx_scraper.py"
-  [turkey]="asia/turkey_pptx_scraper.py"
-  [saudi_arabia]="asia/saudi_arabia_pptx_scraper.py"
-  [uae]="asia/uae_pptx_scraper.py"
-  [iran]="asia/iran_pptx_scraper.py"
-  [jordan]="asia/jordan_pptx_scraper.py"
-  [lebanon]="asia/lebanon_pptx_scraper.py"
-  [qatar]="asia/qatar_pptx_scraper.py"
-  [kazakhstan]="asia/kazakhstan_pptx_scraper.py"
-  # Europe
-  [uk]="europe/uk_pptx_scraper.py"
-  [germany]="europe/germany_pptx_scraper.py"
-  [france]="europe/france_pptx_scraper.py"
-  [italy]="europe/italy_pptx_scraper.py"
-  [spain]="europe/spain_pptx_scraper.py"
-  [netherlands]="europe/netherlands_pptx_scraper.py"
-  [switzerland]="europe/switzerland_pptx_scraper.py"
-  [austria]="europe/austria_pptx_scraper.py"
-  [belgium]="europe/belgium_pptx_scraper.py"
-  [poland]="europe/poland_pptx_scraper.py"
-  [portugal]="europe/portugal_pptx_scraper.py"
-  [greece]="europe/greece_pptx_scraper.py"
-  [czech_republic]="europe/czech_republic_pptx_scraper.py"
-  [denmark]="europe/denmark_pptx_scraper.py"
-  [norway]="europe/norway_pptx_scraper.py"
-  [finland]="europe/finland_pptx_scraper.py"
-  [ireland]="europe/ireland_pptx_scraper.py"
-  [hungary]="europe/hungary_pptx_scraper.py"
-  [bulgaria]="europe/bulgaria_pptx_scraper.py"
-  [croatia]="europe/croatia_pptx_scraper.py"
-  [estonia]="europe/estonia_pptx_scraper.py"
-  # Africa
-  [nigeria]="africa/nigeria_pptx_scraper.py"
-  [kenya]="africa/kenya_pptx_scraper.py"
-  [ghana]="africa/ghana_pptx_scraper.py"
-  [egypt]="africa/egypt_pptx_scraper.py"
-  [morocco]="africa/morocco_pptx_scraper.py"
-  [tunisia]="africa/tunisia_pptx_scraper.py"
-  # Americas
-  [canada]="north_america/canada_pptx_scraper.py"
-  [mexico]="north_america/mexico_pptx_scraper.py"
-  [brazil]="south_america/brazil_pptx_scraper.py"
-  [argentina]="south_america/argentina_pptx_scraper.py"
-  [chile]="south_america/chile_pptx_scraper.py"
-  # Oceania
-  [australia]="oceania/australia_pptx_scraper.py"
-  [new_zealand]="oceania/new_zealand_pptx_scraper.py"
-)
-
+REGIONS="africa asia europe north_america south_america oceania"
 FIRST=1
-for name in "${!SCRAPERS[@]}"; do
-  script="${SCRAPERS[$name]}"
-  # Skip if script doesn't exist
-  [ -f "$ROOT/$script" ] || continue
+COUNT=0
 
-  cmd="cd $ROOT && source $VENV && python3 $script $FLAGS; echo 'DONE: $name — press Enter to close'; read"
+echo "Launching country scrapers..."
 
-  if [ $FIRST -eq 1 ]; then
-    tmux new-session -d -s "$SESSION" -n "$name" "bash -c '$cmd'"
-    FIRST=0
-  else
-    tmux new-window -t "$SESSION" -n "$name" "bash -c '$cmd'"
-  fi
+for region in $REGIONS; do
+  for script in "$ROOT/$region/"*_scraper.py; do
+    [ -f "$script" ] || continue
+
+    # Skip colab-specific scripts (not meant for server)
+    basename "$script" | grep -q "^colab_" && continue
+
+    name=$(basename "$script" _pptx_scraper.py)
+    cmd="cd $ROOT && source $VENV && python3 $script $FLAGS; bash"
+
+    if [ $FIRST -eq 1 ]; then
+      tmux new-session -d -s "$SESSION" -n "$name" "bash -c \"$cmd\""
+      FIRST=0
+    else
+      tmux new-window -t "$SESSION" -n "$name" "bash -c \"$cmd\""
+    fi
+
+    COUNT=$((COUNT + 1))
+  done
 done
 
+echo "  $COUNT country scrapers launched."
 echo ""
-echo "All scrapers launched in tmux session '$SESSION'."
+echo "Launching bulk/archive sources..."
+
+# Common Crawl — scans billions of crawled pages for PPTX (highest volume)
+tmux new-window -t "$SESSION" -n "commoncrawl" \
+  "bash -c \"cd $ROOT && source $VENV && python3 commoncrawl_pptx_scraper.py --target 30000 --crawls 3; bash\""
+
+# Mega scraper — Archive.org + OAI-PMH institutional repos + direct URLs
+tmux new-window -t "$SESSION" -n "mega" \
+  "bash -c \"cd $ROOT && source $VENV && python3 mega_pptx_scraper.py --target 20000; bash\""
+
+# Wayback Machine / Internet Archive CDX
+tmux new-window -t "$SESSION" -n "wayback" \
+  "bash -c \"cd $ROOT && source $VENV && python3 wayback_pptx_scraper.py --target 15000; bash\""
+
+# PPT-Online — 1.4M entries from HuggingFace dataset
+tmux new-window -t "$SESSION" -n "pptonline" \
+  "bash -c \"cd $ROOT && source $VENV && python3 pptonline_scraper.py; bash\""
+
+# Delivery packager — validates and pushes to /root/gdrive/BATCH_02/
+tmux new-window -t "$SESSION" -n "delivery" \
+  "bash -c \"cd $ROOT && source $VENV && python3 deliver_to_gdrive.py --gdrive-path /root/gdrive/BATCH_02 --watch; bash\""
+
+echo "  Bulk sources + delivery packager launched."
 echo ""
-echo "  Attach to watch:  tmux attach -t $SESSION"
-echo "  List windows:     tmux list-windows -t $SESSION"
-echo "  Switch windows:   Ctrl+B then W (inside tmux)"
-echo "  Detach (keep running): Ctrl+B then D"
-echo "  Kill all:         tmux kill-session -t $SESSION"
+echo "======================================================"
+echo "  ALL DONE — $(tmux list-windows -t $SESSION | wc -l) windows running"
+echo "======================================================"
+echo ""
+echo "  Attach to watch : tmux attach -t $SESSION"
+echo "  Switch windows  : Ctrl+B then W"
+echo "  Detach          : Ctrl+B then D"
+echo "  Kill everything : tmux kill-session -t $SESSION"
+echo ""
+echo "  Monitor progress:"
+echo "    find $ROOT -name 'BATCH_02_*.pptx' | wc -l"
