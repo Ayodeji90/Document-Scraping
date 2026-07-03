@@ -62,20 +62,6 @@ PPT_MIMES = {
 # Specific institution domains to query (CC CDX works with these)
 # These are high-value domains known to host PPT files
 DOMAINS = [
-    # Top US universities (large PPT collections)
-    "mit.edu", "stanford.edu", "berkeley.edu", "harvard.edu",
-    "cmu.edu", "gatech.edu", "umich.edu", "cornell.edu",
-    "columbia.edu", "yale.edu", "princeton.edu", "upenn.edu",
-    "umn.edu", "utexas.edu", "ufl.edu", "uiuc.edu",
-    "purdue.edu", "wisc.edu", "psu.edu", "osu.edu",
-    "ucla.edu", "usc.edu", "nyu.edu", "duke.edu",
-    "unc.edu", "virginia.edu", "tamu.edu", "ncsu.edu",
-    "uw.edu", "colorado.edu", "arizona.edu", "uoregon.edu",
-    "bu.edu", "bc.edu", "rice.edu", "nd.edu",
-    "wustl.edu", "rochester.edu", "vanderbilt.edu",
-    "emory.edu", "tulane.edu", "gwu.edu", "gmu.edu",
-    "utk.edu", "uky.edu", "sc.edu", "uark.edu",
-    "rutgers.edu", "umd.edu", "jhu.edu", "drexel.edu",
     # UK universities
     "cam.ac.uk", "ox.ac.uk", "imperial.ac.uk", "ucl.ac.uk",
     "kcl.ac.uk", "lse.ac.uk", "ed.ac.uk", "gla.ac.uk",
@@ -121,12 +107,11 @@ DOMAINS = [
     "unimelb.edu.au", "usyd.edu.au", "anu.edu.au",
     "unsw.edu.au", "uq.edu.au", "monash.edu",
     "auckland.ac.nz", "canterbury.ac.nz",
-    # Non-academic but PPT-rich
+    # Non-academic but PPT-rich (US .gov and slideshare.net excluded per
+    # config/us_domains_blocklist.json and config/pirate_domains_blocklist.json)
     "who.int", "worldbank.org", "un.org", "imf.org",
     "oecd.org", "europa.eu", "ieee.org", "acm.org",
-    "slideshare.net", "researchgate.net",
-    "nih.gov", "nsf.gov", "nasa.gov", "noaa.gov",
-    "cdc.gov", "epa.gov", "fda.gov", "nist.gov",
+    "researchgate.net",
 ]
 
 # ---------------------------------------------------------------------------

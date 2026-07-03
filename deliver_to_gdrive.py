@@ -232,6 +232,10 @@ def scan_and_deliver(gdrive_path: Path) -> int:
     if joint.exists():
         source_dirs.append(joint)
 
+    pptonline = base / "hf_pptonline"
+    if pptonline.exists():
+        source_dirs.append(pptonline)
+
     source_dirs = list(dict.fromkeys(source_dirs))
 
     total = 0

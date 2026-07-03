@@ -11,3 +11,4 @@ lxml>=4.9.0
 python-dotenv>=1.0.0
 python-pptx>=0.6.22
 olefile>=0.46
+pyarrow>=14.0.0

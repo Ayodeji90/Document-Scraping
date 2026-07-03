@@ -116,6 +116,32 @@ CANDIDATE_PORTALS = [
     ("Malta Open Data", "https://data.gov.mt"),
     ("Finland Open Data", "https://www.avoindata.fi"),
     ("Croatia Open Data", "https://data.gov.hr"),
+    ("London Datastore", "https://data.london.gov.uk"),
+    # --- Expanded batch (not live-verified from this sandbox — network access
+    # was blocked when this batch was added; the runtime probe above is what
+    # actually filters these, same as the rest of this list) ---
+    ("Ukraine Open Data", "https://data.gov.ua"),
+    ("Georgia Open Data", "https://data.gov.ge"),
+    ("Armenia Open Data", "https://data.gov.am"),
+    ("Moldova Open Data", "https://date.gov.md"),
+    ("North Macedonia Open Data", "https://opendata.mk"),
+    ("Albania Open Data", "https://opendata.gov.al"),
+    ("Kosovo Open Data", "https://opendatakosovo.org"),
+    ("South Africa Open Data", "https://data.gov.za"),
+    ("Sierra Leone Open Data", "https://data.gov.sl"),
+    ("Colombia Datos Abiertos", "https://datos.gov.co"),
+    ("Uruguay Datos Abiertos", "https://catalogodatos.gub.uy"),
+    ("Paraguay Datos Abiertos", "https://datos.gov.py"),
+    ("Bolivia Datos Abiertos", "https://datos.gob.bo"),
+    ("Dominican Republic Open Data", "https://datos.gob.do"),
+    ("Costa Rica Open Data", "https://datosabiertos.go.cr"),
+    ("El Salvador Open Data", "https://datos.gob.sv"),
+    ("Guatemala Open Data", "https://datos.gob.gt"),
+    ("Honduras Open Data", "https://datos.gob.hn"),
+    ("Nicaragua Open Data", "https://datos.gob.ni"),
+    ("Panama Open Data", "https://datos.gob.pa"),
+    ("Pacific Data Hub", "https://pacificdata.org"),
+    ("Bangladesh Open Data", "https://data.gov.bd"),
 ]
 
 Path("logs").mkdir(exist_ok=True)
