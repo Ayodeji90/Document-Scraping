@@ -11,8 +11,6 @@ from pathlib import Path
 from typing import Set
 
 MASTER_TAGS_FILE   = Path("logs/master_seen_tags.txt")
-BATCH02_COUNTER    = Path("logs/batch02_counter.txt")
-BATCH02_LOCK       = Path("logs/batch02_counter.lock")
 
 
 def load_master_tags() -> Set[str]:
@@ -29,19 +27,32 @@ def save_new_tag(tag: str):
         f.write(f"{tag}\n")
 
 
-def get_next_batch02_number() -> int:
-    """Atomically increment and return the next BATCH_02 sequence number.
+def get_next_batch_number(batch_id: str) -> int:
+    """Atomically increment and return the next sequence number for a given
+    batch_id (e.g. "BATCH_02", "BATCH_03"). Each batch_id gets its own
+    independent counter file, so separate batches don't share numbering.
     Safe for concurrent use across multiple scraper processes."""
-    BATCH02_LOCK.parent.mkdir(exist_ok=True)
-    with open(BATCH02_LOCK, "w") as lf:
+    # "batch02" (no underscore) to exactly match the pre-existing BATCH_02
+    # counter file path — changing it would silently reset production numbering.
+    slug = batch_id.lower().replace("_", "")
+    counter_file = Path(f"logs/{slug}_counter.txt")
+    lock_file = Path(f"logs/{slug}_counter.lock")
+    lock_file.parent.mkdir(exist_ok=True)
+    with open(lock_file, "w") as lf:
         fcntl.flock(lf, fcntl.LOCK_EX)
         try:
-            current = int(BATCH02_COUNTER.read_text().strip()) if BATCH02_COUNTER.exists() else 0
+            current = int(counter_file.read_text().strip()) if counter_file.exists() else 0
             next_num = current + 1
-            BATCH02_COUNTER.write_text(str(next_num))
+            counter_file.write_text(str(next_num))
         finally:
             fcntl.flock(lf, fcntl.LOCK_UN)
     return next_num
+
+
+def get_next_batch02_number() -> int:
+    """Atomically increment and return the next BATCH_02 sequence number.
+    Safe for concurrent use across multiple scraper processes."""
+    return get_next_batch_number("BATCH_02")
 
 
 def save_file_metadata(filepath: Path, source_url: str, extra: dict = None) -> Path:

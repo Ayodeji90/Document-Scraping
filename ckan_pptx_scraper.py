@@ -64,7 +64,7 @@ from src.filters.domain_filter import DomainFilter  # noqa: E402
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
-OUTPUT_DIR = Path("joint_downloaded")
+OUTPUT_DIR = Path("ckan_downloaded")  # isolated from mega/commoncrawl/wayback's shared joint_downloaded/
 SEEN_FILE = Path("logs/master_seen_tags.txt")
 CONTENT_HASH_FILE = Path("logs/master_content_hashes.txt")
 STATS_FILE = Path("logs/ckan_stats.json")
@@ -349,10 +349,17 @@ def download_resource(
         stats["blocked"] += 1
         return False
 
-    ext = ".ppt" if url.lower().split("?")[0].endswith(".ppt") else ".pptx"
     portal_slug = re.sub(r"[^\w]", "_", urlparse(record["portal_base_url"]).netloc)[:30]
-    title_slug = re.sub(r"[^\w]", "_", (record.get("package_title") or "untitled")[:50])
-    filename = f"{tag}_ckan_{portal_slug}_{title_slug}{ext}"
+    # Use the resource's own filename, not the dataset title — a dataset often
+    # bundles English/French (or other) variants of the same title as separate
+    # resources, and the title alone would make genuinely different files look
+    # like duplicates.
+    original_name = Path(urlparse(url).path).name or "file.pptx"
+    if not original_name.lower().endswith((".ppt", ".pptx")):
+        original_name += ".pptx" if not url.lower().split("?")[0].endswith(".ppt") else ".ppt"
+    name_stem = re.sub(r"[^\w.\-]", "_", Path(original_name).stem)[:80]
+    ext = Path(original_name).suffix.lower()
+    filename = f"{tag}_ckan_{portal_slug}_{name_stem}{ext}"
     dest = OUTPUT_DIR / filename
 
     if dest.exists():
