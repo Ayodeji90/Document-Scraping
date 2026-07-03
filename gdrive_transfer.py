@@ -397,6 +397,11 @@ def upload_file(service, filepath: Path, folder_id: str, upload_name: str, retri
             else:
                 logger.error("Upload error %s: %s", filepath.name, e)
                 return None
+        except Exception as e:
+            wait = 2 ** attempt * 10
+            logger.warning("Upload error (attempt %d/%d) %s: %s — retrying in %ds",
+                           attempt + 1, retries, filepath.name, e, wait)
+            time.sleep(wait)
     return None
 
 
@@ -592,6 +597,11 @@ def main():
                 analysis.get("slide_count", 0),
             )
 
+        except Exception as e:
+            logger.error("  UNEXPECTED ERROR on %s: %s — skipping file", filename, e)
+            progress["failed"].append(file_id)
+            stats["failed"] += 1
+            save_progress(progress)
         finally:
             if tmp.exists():
                 tmp.unlink()
