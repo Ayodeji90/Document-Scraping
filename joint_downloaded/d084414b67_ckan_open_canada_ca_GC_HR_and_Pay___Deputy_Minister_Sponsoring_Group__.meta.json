@@ -1,0 +1,22 @@
+{
+  "source_url": "https://open.canada.ca/data/dataset/00df4861-94fc-4d78-8ad4-0aa8cc8bb46e/resource/7b722df9-098d-4f9c-afc9-415470b28d7f/download/2024-05-31-transparency-by-design-plan.pptx",
+  "original_filename": "2024-05-31-transparency-by-design-plan.pptx",
+  "source_domain": "open.canada.ca",
+  "collection_timestamp": "2026-07-02T19:43:54Z",
+  "publication_date": "2024-10-02T16:10:34.770498",
+  "author": "Public Services and Procurement Canada | Services publics et Approvisionnement Canada",
+  "organization": "Public Services and Procurement Canada | Services publics et Approvisionnement Canada",
+  "title": "2024-05-31 Transparency by Design Plan",
+  "language": "",
+  "tags": [],
+  "crawl_metadata": {
+    "source": "ckan",
+    "portal_name": "Canada Open Government",
+    "portal_base_url": "https://open.canada.ca/data",
+    "package_id": "00df4861-94fc-4d78-8ad4-0aa8cc8bb46e",
+    "package_title": "GC HR and Pay - Deputy Minister Sponsoring Group (2024-2025)",
+    "resource_id": "7b722df9-098d-4f9c-afc9-415470b28d7f",
+    "license_title": "Open Government Licence - Canada",
+    "declared_format": "PPTX"
+  }
+}

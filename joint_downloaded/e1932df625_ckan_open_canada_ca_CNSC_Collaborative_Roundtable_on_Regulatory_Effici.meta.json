@@ -1,0 +1,22 @@
+{
+  "source_url": "https://open.canada.ca/data/dataset/cdb60601-85a8-4e47-979c-66758c0a47c0/resource/a8d22937-2396-4cce-bfc2-ce99a8553b78/download/collaborative-roundtable-on-regulatory-efficiency-presentation.pptx",
+  "original_filename": "collaborative-roundtable-on-regulatory-efficiency-presentation.pptx",
+  "source_domain": "open.canada.ca",
+  "collection_timestamp": "2026-07-02T19:43:44Z",
+  "publication_date": "2026-05-15T17:54:10.503908",
+  "author": "Canadian Nuclear Safety Commission | Commission canadienne de sûreté nucléaire",
+  "organization": "Canadian Nuclear Safety Commission | Commission canadienne de sûreté nucléaire",
+  "title": "CNSC Collaborative Roundtable on Regulatory Efficiency - Presentation",
+  "language": "",
+  "tags": [],
+  "crawl_metadata": {
+    "source": "ckan",
+    "portal_name": "Canada Open Government",
+    "portal_base_url": "https://open.canada.ca/data",
+    "package_id": "cdb60601-85a8-4e47-979c-66758c0a47c0",
+    "package_title": "CNSC Collaborative Roundtable on Regulatory Efficiency - Presentation",
+    "resource_id": "a8d22937-2396-4cce-bfc2-ce99a8553b78",
+    "license_title": "Open Government Licence - Canada",
+    "declared_format": "PPTX"
+  }
+}

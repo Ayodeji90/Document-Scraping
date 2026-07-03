@@ -1,0 +1,25 @@
+{
+  "source_url": "https://data.humdata.org/dataset/d8d992f3-5374-448f-a3d5-bed7c1925a11/resource/14387aa1-f41f-470e-b477-1c6397fbff89/download/gab_ppt_map.pptx",
+  "original_filename": "gab_ppt_map.pptx",
+  "source_domain": "data.humdata.org",
+  "collection_timestamp": "2026-07-02T19:43:37Z",
+  "publication_date": "2015-09-01T02:47:36.587397",
+  "author": "OCHA West and Central Africa (ROWCA)",
+  "organization": "OCHA West and Central Africa (ROWCA)",
+  "title": "gab_ppt_map.pptx",
+  "language": "",
+  "tags": [
+    "administrative boundaries-divisions",
+    "geodata"
+  ],
+  "crawl_metadata": {
+    "source": "ckan",
+    "portal_name": "Humanitarian Data Exchange (HDX)",
+    "portal_base_url": "https://data.humdata.org",
+    "package_id": "d8d992f3-5374-448f-a3d5-bed7c1925a11",
+    "package_title": "Gabon - Subnational Administrative Boundaries",
+    "resource_id": "14387aa1-f41f-470e-b477-1c6397fbff89",
+    "license_title": "Creative Commons Attribution for Intergovernmental Organisations (CC BY-IGO)",
+    "declared_format": "PPTX"
+  }
+}
